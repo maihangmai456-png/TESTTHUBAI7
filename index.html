@@ -1,0 +1,3540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script type="module" src="/@vite/client"></script>
+
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EduSecure - Hệ Thống Thi Trắc Nghiệm Chống Gian Lận</title>
+  <meta name="description" content="Hệ thống thi trắc nghiệm Công nghệ 10 chống gian lận, hỗ trợ 2 bộ đề và tích hợp Google Sheets." />
+  <meta property="og:title" content="EduSecure - Hệ Thống Thi Trắc Nghiệm Chống Gian Lận" />
+  <meta property="og:description" content="Hệ thống thi trắc nghiệm Công nghệ 10 chống gian lận, hỗ trợ 2 bộ đề và tích hợp Google Sheets." />
+  <meta property="og:type" content="website" />
+  <style>
+    /* 100% PURE EMBEDDED CSS - HOẠT ĐỘNG HOÀN TOÀN OFFLINE KHÔNG CẦN INTERNET */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f0f7ff;
+      background-image: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f7ff 100%);
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 14px 90px 14px;
+      width: 100%;
+      flex: 1;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #bae6fd;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: #0284c7;
+      color: #ffffff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 17px;
+      box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 15px;
+      color: #0369a1;
+    }
+    .badge-offline {
+      font-size: 10px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-teacher-portal {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 10px;
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-teacher-portal:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #bae6fd;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04);
+      position: relative;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #1e40af 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.2);
+    }
+    .hero h1 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .hero p {
+      font-size: 12px;
+      color: #e0f2fe;
+      line-height: 1.4;
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    @media (min-width: 600px) {
+      .rules-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .rule-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+    }
+    .rule-num {
+      width: 18px;
+      height: 18px;
+      background: #facc15;
+      color: #0f172a;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      gap: 6px;
+      width: 100%;
+    }
+    .btn-primary {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+    }
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+    .btn-emerald {
+      background: #059669;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+    }
+    .btn-emerald:hover {
+      background: #047857;
+    }
+    .btn-emerald:active {
+      transform: scale(0.98);
+    }
+    .btn-secondary {
+      background: #f0f9ff;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .btn-secondary:hover {
+      background: #e0f2fe;
+    }
+    .btn-danger {
+      background: #e11d48;
+      color: #ffffff;
+    }
+    .btn-danger:hover {
+      background: #be123c;
+    }
+    .btn-disabled {
+      background: #f1f5f9 !important;
+      color: #94a3b8 !important;
+      border: 1px solid #cbd5e1 !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+    .input-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #bae6fd;
+      border-radius: 12px;
+      font-size: 13px;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .input-control:focus {
+      outline: none;
+      border-color: #0284c7;
+      background: #ffffff;
+    }
+
+    /* Room Status Bar */
+    .room-status-bar {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-width: 1px;
+      border-style: solid;
+    }
+    .room-status-bar.both-closed {
+      background: #fffbeb;
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+    .room-status-bar.both-open {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+      color: #065f46;
+    }
+    .room-status-bar.partial {
+      background: #f0f9ff;
+      border-color: #7dd3fc;
+      color: #0369a1;
+    }
+
+    /* 2 Exam Cards Grid */
+    .exam-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    @media (min-width: 768px) {
+      .exam-cards-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .exam-set-card {
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid #bae6fd;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.05);
+      transition: all 0.2s;
+    }
+    .exam-set-card.card-exam-1 {
+      border-color: #bfdbfe;
+      background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+    }
+    .exam-set-card.card-exam-2 {
+      border-color: #a7f3d0;
+      background: linear-gradient(135deg, #f8fafc 0%, #ecfdf5 100%);
+    }
+
+    /* Proctor Bar */
+    .proctor-bar {
+      background: #ffffff;
+      border: 1px solid #bae6fd;
+      border-radius: 16px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+    .timer {
+      font-family: monospace;
+      font-weight: 800;
+      font-size: 15px;
+      color: #0369a1;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 4px 10px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .strikes {
+      display: flex;
+      gap: 4px;
+    }
+    .strike-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 6px;
+      border-radius: 8px;
+      font-family: monospace;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #94a3b8;
+    }
+    .strike-badge.active {
+      background: #f59e0b;
+      color: #ffffff;
+      border-color: #d97706;
+    }
+    .strike-badge.active.final {
+      background: #e11d48;
+      color: #ffffff;
+      border-color: #be123c;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Horizontal Slider */
+    .slider-track {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slider-btn {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid #bae6fd;
+      background: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0369a1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slider-btn.current {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+    .slider-btn.done {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+    }
+    .slider-btn.forfeited {
+      background: #ffe4e6;
+      color: #e11d48;
+      border-color: #fda4af;
+      text-decoration: line-through;
+    }
+
+    /* Question Box */
+    .q-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #64748b;
+    }
+    .q-tag {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .q-pts {
+      font-family: monospace;
+      font-weight: 700;
+      color: #0284c7;
+      background: #f0f9ff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #bae6fd;
+    }
+    .q-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    /* Multiple Choice Options */
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.15s ease;
+      font-size: 13px;
+    }
+    .option-item:hover {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+    .option-item.selected {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0c4a6e;
+      font-weight: 600;
+    }
+    .option-item.forfeited {
+      background: #fff1f2;
+      border-color: #f43f5e;
+      color: #881337;
+    }
+    .opt-letter {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 800;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .option-item.selected .opt-letter {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    /* True/False Statements */
+    .context-box {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1px solid #bae6fd;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: #0369a1;
+      line-height: 1.5;
+    }
+    .tf-row {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .tf-text {
+      margin-bottom: 6px;
+      color: #1e293b;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .tf-btns {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .tf-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      cursor: pointer;
+    }
+    .tf-btn.active-true {
+      background: #16a34a;
+      color: #ffffff;
+      border-color: #16a34a;
+    }
+    .tf-btn.active-false {
+      background: #e11d48;
+      color: #ffffff;
+      border-color: #e11d48;
+    }
+
+    /* Forfeited Alert */
+    .forfeited-banner {
+      background: #ffe4e6;
+      border: 1px solid #fecdd3;
+      color: #9f1239;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Anti-Cheat Watermark Shield */
+    .watermark-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-content: space-around;
+      opacity: 0.05;
+      font-weight: 900;
+      font-size: 16px;
+      color: #0369a1;
+      transform: rotate(-15deg);
+      user-select: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Obscured Shield when blurred */
+    .blur-shield {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    /* Bottom sticky bar on mobile */
+    .mobile-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid #bae6fd;
+      padding: 8px 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 35;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+    }
+    @media (min-width: 600px) {
+      .mobile-bar {
+        display: none;
+      }
+    }
+
+    /* Floating Simulation Dock - Phía bên trái trên cùng */
+    .sim-dock {
+      position: fixed;
+      top: 66px;
+      left: 12px;
+      background: #ffffff;
+      border: 1px solid #bae6fd;
+      border-radius: 16px;
+      padding: 9px 11px;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12);
+      z-index: 45;
+      font-size: 11px;
+      width: 175px;
+      transition: all 0.2s ease;
+    }
+    @media (min-width: 600px) {
+      .sim-dock {
+        top: 68px;
+        left: 14px;
+        width: 185px;
+        padding: 10px 12px;
+      }
+    }
+    .sim-dock-minimized {
+      width: auto !important;
+      padding: 6px 10px !important;
+      border-radius: 12px !important;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 50;
+    }
+    .modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* Result Box */
+    .result-score-badge {
+      font-size: 40px;
+      font-weight: 900;
+      font-family: monospace;
+      color: #0284c7;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .result-score-badge.danger {
+      color: #e11d48;
+    }
+
+    /* Print styling */
+    @media print {
+      header, .mobile-bar, .sim-dock, .btn, .header-actions {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+      }
+      .card {
+        box-shadow: none !important;
+        border: 1px solid #000000 !important;
+      }
+    }
+  </style>
+<script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">🛡️</div>
+        <div>
+          <div style="display:flex; align-items:center;">
+            <span class="brand-title">EduSecure</span>
+            <span class="badge-offline">Bản Offline</span>
+          </div>
+          <div style="font-size:10px; color:#64748b;">Hệ thống thi trắc nghiệm chống gian lận & thoát tab</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div id="student-badge" class="hidden" style="font-size:11px; background:#f0f9ff; padding:4px 8px; border-radius:8px; border:1px solid #bae6fd; display:flex; align-items:center; gap:6px;">
+          <span id="badge-name" style="font-weight:700;">Học sinh</span>
+          <button id="btn-logout-student" style="background:none; border:none; color:#0284c7; cursor:pointer; font-size:10px; text-decoration:underline; padding:0 2px;">(Đổi)</button>
+        </div>
+        <button id="btn-open-gv-portal" class="btn-teacher-portal">
+          👩‍🏫 Cổng Giáo Viên
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+
+    <!-- VIEW 0: TRANG ĐĂNG NHẬP THÍ SINH (HIỂN THỊ ĐẦU TIÊN KHI MỞ WEB) -->
+    <div id="view-login">
+      <div class="hero">
+        <h1>Phòng Khảo Thí Trắc Nghiệm Công Nghệ 10</h1>
+        <p>Hệ thống phòng khảo thí trắc nghiệm trực tuyến an toàn, hỗ trợ giám sát chống gian lận và thoát màn hình.</p>
+
+        <div class="rules-grid">
+          <div class="rule-box">
+            <div class="rule-num">1</div>
+            <div>
+              <strong>Thoát màn hình / Chụp màn hình</strong>
+              <div style="color:#bae6fd; font-size:10px;">Phạt SAI (0 điểm) câu hỏi hiện tại ngay lập tức.</div>
+            </div>
+          </div>
+          <div class="rule-box">
+            <div class="rule-num">2</div>
+            <div>
+              <strong>Đến lần thứ 3 vi phạm</strong>
+              <div style="color:#bae6fd; font-size:10px;">Đình chỉ thi ngay, thu bài và tính 0 ĐIỂM toàn bài.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Candidate login form card -->
+      <div class="card" style="box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid #bae6fd; padding-bottom:8px;">
+          <span style="font-size:24px;">🎓</span>
+          <div>
+            <h2 style="font-size:16px; font-weight:800; color:#0369a1;">
+              Cổng Đăng Nhập Thí Sinh (4 Lớp: 10C05, 10C06, 10C07, 10C08)
+            </h2>
+            <div style="font-size:11px; color:#64748b;">Học sinh đăng nhập 1 lần, hệ thống sẽ tự động ghi nhớ thông tin cho các lần mở web sau</div>
+          </div>
+        </div>
+
+        <!-- Banner khi đã có thông tin ghi nhớ lần trước -->
+        <div id="remembered-account-alert" class="hidden" style="background:#ecfdf5; border:1px solid #86efac; border-radius:12px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">💾</span>
+            <div style="font-size:12px; color:#166534;">
+              <strong>Đã ghi nhớ thông tin đăng nhập:</strong>
+              <div id="remembered-account-desc" style="font-size:11px; color:#15803d; margin-top:2px;"></div>
+            </div>
+          </div>
+          <button id="btn-clear-remembered" type="button" style="background:#ffffff; border:1px solid #fca5a5; color:#b91c1c; font-size:11px; font-weight:700; padding:4px 10px; border-radius:8px; cursor:pointer;">
+            Xóa nhớ / Nhập bạn khác
+          </button>
+        </div>
+
+        <div class="input-group">
+          <label>1. Chọn Lớp học:</label>
+          <select id="select-class" class="input-control" style="background:#f0f9ff; font-weight:700;">
+            <option value="10C05">Lớp 10C05 (46 học sinh)</option>
+            <option value="10C06">Lớp 10C06 (48 học sinh)</option>
+            <option value="10C07">Lớp 10C07 (48 học sinh)</option>
+            <option value="10C08">Lớp 10C08 (47 học sinh)</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1.6fr; gap:8px;">
+          <div class="input-group">
+            <label>2. Nhập Mã số / STT (VD: 15):</label>
+            <input type="number" id="input-code-num" class="input-control" placeholder="VD: 15" min="1" style="background:#f0f9ff; font-weight:800; border:2px solid #0284c7; font-size:14px; margin-bottom:4px;">
+            <select id="select-code" class="input-control" style="background:#f8fafc; font-size:11px; padding:4px;">
+            </select>
+          </div>
+          <div class="input-group">
+            <label>3. Họ và tên học sinh:</label>
+            <input type="text" id="input-name" class="input-control" readonly style="background:#f8fafc; font-weight:700; color:#0f172a;" placeholder="Tự động hiện tên khi nhập số">
+            <span id="name-status" style="font-size:10px; color:#16a34a; font-weight:600; margin-top:2px; display:block;"></span>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; margin:10px 0 14px 0; font-size:12px; color:#334155;">
+          <input type="checkbox" id="check-remember-student" checked style="width:16px; height:16px; accent-color:#0284c7; cursor:pointer;">
+          <label for="check-remember-student" style="cursor:pointer; font-weight:600;">
+            Ghi nhớ thông tin đăng nhập trên thiết bị này (lần sau mở web tự động điền sẵn)
+          </label>
+        </div>
+
+        <button id="btn-student-login" class="btn btn-primary" style="padding:12px; font-size:14px; font-weight:800; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
+          🚀 Xác Nhận Đăng Nhập & Vào Phòng Thi
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: LOBBY (HIỂN THỊ SAU KHI ĐĂNG NHẬP HOẶC TỰ ĐỘNG NHỚ) -->
+    <div id="view-lobby" class="hidden">
+      <!-- Active Student Card in Lobby -->
+      <div class="card" style="background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-color:#7dd3fc; margin-bottom:14px; padding:12px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:38px; height:38px; border-radius:10px; background:#0284c7; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:18px;">
+              👤
+            </div>
+            <div>
+              <div style="font-size:11px; color:#0369a1; font-weight:700; text-transform:uppercase;">Thí Sinh Đang Dự Thi:</div>
+              <strong id="lobby-student-name" style="font-size:15px; color:#0f172a;">---</strong>
+              <span id="lobby-student-meta" style="font-size:12px; color:#475569; margin-left:6px;"></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button id="btn-switch-student-lobby" class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:11px; background:#ffffff;">
+              🔄 Đổi Thí Sinh / Đăng Xuất
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Live Room Status Banner -->
+      <div id="room-status-banner" class="room-status-bar both-open">
+        <span id="room-status-indicator" style="width:10px; height:10px; border-radius:999px; background:#16a34a; flex-shrink:0;"></span>
+        <div id="room-status-text">
+          <strong>Phòng Thi Đang Mở:</strong> Đề Thi Bài 7 (10 câu trắc nghiệm chọn ngẫu nhiên từ bộ 20 câu) đã sẵn sàng. Chỉ nộp bài sau khi hoàn thành đủ 10/10 câu hỏi.
+        </div>
+      </div>
+
+      <!-- Exam Selection Section -->
+      <div style="margin-top:14px;">
+        <h3 style="font-size:15px; font-weight:800; color:#0f172a; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+          <span>📋</span> Danh Sách Đề Thi Trực Tuyến
+        </h3>
+
+        <div class="exam-set-card card-exam-1" style="max-width:640px;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px;">
+              <div>
+                <span style="display:inline-block; font-size:10px; font-weight:800; color:#0369a1; background:#e0f2fe; padding:3px 8px; border-radius:999px; text-transform:uppercase; margin-bottom:6px;">
+                  Công Nghệ 10 • Bài 7
+                </span>
+                <h4 style="font-size:16px; font-weight:800; color:#0f172a; line-height:1.3;">
+                  Đề Thi Trắc Nghiệm: Ngành Nghề Kĩ Thuật, Công Nghệ
+                </h4>
+              </div>
+              <span style="font-size:11px; font-weight:800; color:#15803d; background:#dcfce7; padding:3px 10px; border-radius:999px; white-space:nowrap;">
+                ● Đang Mở
+              </span>
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; font-size:11px; font-weight:700; color:#334155;">
+              <span style="background:#ffffff; border:1px solid #bfdbfe; padding:3px 8px; border-radius:8px;">⏱️ 10 phút</span>
+              <span style="background:#ffffff; border:1px solid #bfdbfe; padding:3px 8px; border-radius:8px;">🎯 Thang 10.0đ</span>
+              <span style="background:#ffffff; border:1px solid #bfdbfe; padding:3px 8px; border-radius:8px;">📝 10/20 câu ngẫu nhiên</span>
+              <span style="background:#ffffff; border:1px solid #bfdbfe; padding:3px 8px; border-radius:8px;">🔀 Trộn đề &amp; đáp án</span>
+            </div>
+
+            <p style="font-size:12px; color:#475569; line-height:1.5; margin-bottom:14px;">
+              Hệ thống rút ngẫu nhiên <strong>10 câu hỏi</strong> từ ngân hàng <strong>20 câu Bài 7</strong> (4 Nhận biết, 3 Thông hiểu, 3 Vận dụng). Nút <strong>Nộp bài</strong> chỉ xuất hiện sau khi làm xong đủ <strong>10/10 câu</strong>; đáp án và giải thích chi tiết sẽ hiển thị ngay sau khi nộp bài.
+            </p>
+          </div>
+
+          <button id="btn-start-exam-bai7" class="btn btn-primary" style="padding:11px 16px; font-size:13px; font-weight:800;">
+            🚀 Bắt Đầu Làm Bài (10 Câu Trắc Nghiệm)
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: ACTIVE EXAM -->
+    <div id="view-exam" class="hidden">
+      <!-- Proctoring Header Bar -->
+      <div class="proctor-bar">
+        <div>
+          <span id="exam-badge-type" style="font-size:10px; color:#0284c7; font-weight:800; text-transform:uppercase; display:block;">ĐỀ THI ĐANG LÀM</span>
+          <div class="timer">
+            <span>⏱️</span>
+            <span id="timer-text">10:00</span>
+          </div>
+        </div>
+
+        <div>
+          <span style="font-size:10px; color:#64748b; font-weight:700; display:block; text-align:right;">VI PHẠM (TỐI ĐA 3)</span>
+          <div class="strikes">
+            <div id="strike-1" class="strike-badge">1/3</div>
+            <div id="strike-2" class="strike-badge">2/3</div>
+            <div id="strike-3" class="strike-badge">3/3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Progress Pill -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap;">
+        <span id="exam-progress-pill" style="font-size:11px; font-weight:800; color:#0369a1; background:#e0f2fe; border:1px solid #bae6fd; padding:4px 10px; border-radius:999px;">
+          Đã làm: 0/10 câu
+        </span>
+        <span id="exam-submit-hint" style="font-size:11px; color:#64748b; font-weight:600;">
+          Hoàn thành đủ 10/10 câu để mở nút Nộp bài
+        </span>
+      </div>
+
+      <!-- Horizontal Question Slider -->
+      <div id="slider-track" class="slider-track"></div>
+
+      <!-- Question Card -->
+      <div class="card" style="min-height:280px;">
+        <div id="watermark-layer" class="watermark-layer"></div>
+        <div id="blur-shield" class="blur-shield hidden">
+          <div style="font-size:28px; margin-bottom:6px;">⚠️</div>
+          <strong style="color:#0f172a; font-size:14px;">Màn Hình Đang Tạm Khóa</strong>
+          <p style="font-size:11px; color:#64748b; margin-top:4px; max-width:280px;">
+            Phát hiện chuyển tab hoặc thao tác chụp màn hình. Nội dung câu hỏi đã tự động làm mờ để bảo mật.
+          </p>
+          <button id="btn-unblur" class="btn btn-primary" style="margin-top:10px; width:auto; padding:6px 16px; font-size:11px;">
+            Chạm để tiếp tục
+          </button>
+        </div>
+
+        <div id="forfeit-banner" class="forfeited-banner hidden">
+          <span>🚨</span>
+          <span>Câu này đã bị PHẠT 0 ĐIỂM do thí sinh vi phạm thoát màn hình / chụp màn hình.</span>
+        </div>
+
+        <div class="q-meta">
+          <span id="q-level-tag" class="q-tag">Nhận biết</span>
+          <span id="q-points-tag" class="q-pts">1.0 điểm</span>
+        </div>
+
+        <h2 id="q-title" class="q-title">Nội dung câu hỏi...</h2>
+
+        <!-- Context Box (Bảng 7.1 / Ngữ cảnh câu hỏi) -->
+        <div id="q-context-box" class="context-box hidden"></div>
+
+        <!-- Options Container for Multiple Choice -->
+        <div id="mc-options-container"></div>
+
+        <!-- Options Container for True / False -->
+        <div id="tf-options-container" class="hidden"></div>
+
+        <!-- Prev / Next Desktop Buttons -->
+        <div id="desktop-nav" style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid #f1f5f9;">
+          <button id="btn-prev" class="btn btn-secondary" style="width:auto; padding:8px 16px;">← Câu trước</button>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="btn-jump-unanswered" class="btn btn-secondary" style="width:auto; padding:8px 14px; display:none; border-color:#fcd34d; background:#fffbeb; color:#92400e;">Đi tới câu chưa làm →</button>
+            <button id="btn-submit-desktop" class="btn btn-danger" style="width:auto; padding:8px 20px; display:none;">Nộp bài thi</button>
+            <button id="btn-next" class="btn btn-primary" style="width:auto; padding:8px 16px;">Câu sau →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: RESULT -->
+    <div id="view-result" class="hidden">
+      <div class="card" style="text-align:center;">
+        <span id="result-status-tag" style="display:inline-block; font-size:11px; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:6px;">
+          HOÀN THÀNH BÀI THI
+        </span>
+        <h2 id="result-name" style="font-size:18px; font-weight:800; color:#0f172a;">Nguyễn Văn An</h2>
+        <div id="result-meta" style="font-size:12px; color:#64748b;">SBD: 15 • Lớp 10C05 • Đề 1</div>
+
+        <div id="result-score-box" class="result-score-badge">0.0/10</div>
+
+        <div id="disqualified-box" class="hidden" style="background:#ffe4e6; border:1px solid #fecdd3; color:#9f1239; padding:10px; border-radius:12px; font-size:12px; font-weight:700; margin:10px 0;">
+          🚨 BÀI THI BỊ ĐÌNH CHỈ: Thí sinh đã thoát màn hình 3 lần theo quy chế. Toàn bộ bài thi bị hủy điểm (0 điểm).
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; text-align:left;">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:10px; border-radius:10px;">
+            <div style="font-size:10px; color:#64748b;">Số câu đúng:</div>
+            <strong id="res-correct" style="font-size:15px; color:#16a34a; font-family:monospace;">0/9 câu</strong>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:10px; border-radius:10px;">
+            <div style="font-size:10px; color:#64748b;">Số lần vi phạm:</div>
+            <strong id="res-violations" style="font-size:15px; color:#e11d48; font-family:monospace;">0 lần</strong>
+          </div>
+        </div>
+
+        <!-- Google Sheets Sync Row Box -->
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:12px; margin-top:14px; text-align:left;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="color:#065f46; font-size:12px;">📊 Bảng Điểm Sheet BAI TEST THU</strong>
+            <span style="font-size:10px; font-family:monospace; background:#ffffff; border:1px solid #6ee7b7; padding:2px 6px; border-radius:6px; color:#047857;">ID: 1vy8REFua2ca...</span>
+          </div>
+          <p id="sheet-sync-status" style="font-size:11px; color:#064e3b; margin-bottom:8px;">
+            Hệ thống tự động tìm sheet <strong>BAI TEST THU</strong> theo đúng <strong>Tên HS</strong>, <strong>Lớp</strong>, <strong>Mã HS</strong> và ghi tiếp từ cột D (Thời gian đăng nhập, Mã đề thi, Loại đề thi, Thời gian làm bài, Điểm thi lần 1, lần 2...).
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="btn-copy-sheet-row" class="btn btn-secondary" style="font-size:11px; padding:6px 12px; background:#ffffff; width:auto;">
+              📋 Sao Chép Dòng Điểm Vào Sheet
+            </button>
+            <a href="https://docs.google.com/spreadsheets/d/1vy8REFua2caqCRXtxYrvHQIw1mA83vkS03evT3T4Wus" target="_blank" class="btn btn-primary" style="font-size:11px; padding:6px 12px; text-decoration:none; display:inline-flex; align-items:center; width:auto;">
+              ↗ Mở Google Sheet BAI TEST THU
+            </a>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:14px;">
+          <button id="btn-retake" class="btn btn-primary">Thi Lại (Đề Mới)</button>
+          <button id="btn-back-lobby" class="btn btn-secondary">Đổi Bộ Đề Khác</button>
+          <button onclick="window.print()" class="btn btn-secondary" style="width:auto;">In Điểm</button>
+        </div>
+      </div>
+
+      <!-- Detailed Review List -->
+      <div id="review-list"></div>
+    </div>
+
+  </div>
+
+  <!-- STICKY BOTTOM BAR FOR MOBILE -->
+  <div id="mobile-bar" class="mobile-bar" style="display:none;">
+    <button id="m-btn-prev" class="btn btn-secondary" style="flex:1;">← Trước</button>
+    <button id="m-btn-next" class="btn btn-secondary" style="flex:1;">Sau →</button>
+    <button id="m-btn-jump-unanswered" class="btn btn-secondary" style="flex:1.4; display:none; border-color:#fcd34d; background:#fffbeb; color:#92400e;">Câu chưa làm →</button>
+    <button id="m-btn-submit" class="btn btn-danger" style="flex:1.2; display:none;">Nộp bài</button>
+  </div>
+
+  <!-- FLOATING SIMULATION DOCK FOR PROCTOR TESTING (PHÍA BÊN TRÁI TRÊN CÙNG) -->
+  <div id="sim-dock" class="sim-dock hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div style="font-weight:800; color:#0369a1; font-size:11px; display:flex; align-items:center; gap:4px;">
+        <span>🧪</span> TEST GIÁM SÁT:
+      </div>
+      <button id="btn-toggle-sim" title="Thu gọn / Mở rộng" style="background:none; border:none; color:#64748b; font-size:12px; font-weight:700; cursor:pointer; padding:0 3px; line-height:1;">−</button>
+    </div>
+    <div id="sim-dock-body" style="display:flex; flex-direction:column; gap:6px;">
+      <button id="btn-sim-exit" style="background:#ffe4e6; border:1px solid #fecdd3; color:#9f1239; padding:6px 8px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; transition:transform 0.1s;">
+        <span>🚨</span> Test: Thoát App
+      </button>
+      <button id="btn-sim-shot" style="background:#e0f2fe; border:1px solid #bae6fd; color:#0369a1; padding:6px 8px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; transition:transform 0.1s;">
+        <span>📱</span> Test: Chụp Màn Hình
+      </button>
+    </div>
+  </div>
+
+  <!-- ALERT MODAL -->
+  <div id="alert-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="font-size:32px; text-align:center; margin-bottom:6px;">🚨</div>
+      <h3 id="modal-title" style="font-size:15px; font-weight:800; text-align:center; color:#9f1239; margin-bottom:6px;">
+        CẢNH BÁO VI PHẠM PHÒNG THI!
+      </h3>
+      <div id="modal-desc" style="font-size:12px; color:#475569; text-align:center; margin-bottom:12px; line-height:1.4;">
+        Thí sinh đã rời khỏi màn hình bài thi.
+      </div>
+      <div id="modal-penalty" style="background:#fff1f2; border:1px solid #fecdd3; color:#be123c; padding:8px 10px; border-radius:10px; font-size:11px; font-weight:700; text-align:center; margin-bottom:14px;">
+        Đánh dấu câu hỏi hiện tại là SAI (0 điểm).
+      </div>
+      <button id="btn-modal-ack" class="btn btn-danger">Tôi Đã Hiểu Và Tiếp Tục</button>
+    </div>
+  </div>
+
+  <!-- SUBMIT CONFIRMATION MODAL -->
+  <div id="submit-confirm-modal" class="modal-overlay hidden">
+    <div class="modal-card" style="text-align:center;">
+      <div style="font-size:36px; margin-bottom:8px;">📝</div>
+      <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:6px;">
+        Xác Nhận Nộp Bài Thi
+      </h3>
+      <p style="font-size:13px; color:#475569; margin-bottom:16px; line-height:1.5;">
+        Bạn đã hoàn thành tất cả 10/10 câu hỏi của đề thi. Bạn có muốn nộp bài để kết thúc, xem điểm và nhận đáp án chi tiết ngay không?
+      </p>
+      <div style="display:flex; gap:10px;">
+        <button id="btn-cancel-submit" class="btn btn-secondary" style="flex:1; padding:10px 14px;">
+          ↩ Quay lại làm tiếp
+        </button>
+        <button id="btn-confirm-submit" class="btn btn-danger" style="flex:1; padding:10px 14px;">
+          ✓ Nộp bài ngay
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- GIAO VIEN PORTAL MODAL (MAI HANG) -->
+  <div id="gv-portal-modal" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width:860px; width:95%; max-height:90vh; overflow-y:auto; padding:20px;">
+      
+      <!-- Top header bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid #bae6fd; padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:24px;">👩‍🏫</span>
+          <div>
+            <h3 style="font-size:16px; font-weight:800; color:#0369a1;">Cổng Tài Nguyên & Quản Trị Giáo Viên</h3>
+            <div style="font-size:11px; color:#64748b;">Hệ thống khảo thí Công nghệ 10 • Giáo viên: Mai Hằng</div>
+          </div>
+        </div>
+        <button id="btn-close-gv-portal" style="background:none; border:none; font-size:22px; color:#64748b; cursor:pointer; padding:4px 8px;">✕</button>
+      </div>
+
+      <!-- VIEW 1: LOGIN BOX -->
+      <div id="gv-auth-box">
+        <div style="max-width:400px; margin:20px auto; background:#f8fafc; border:1px solid #bae6fd; border-radius:18px; padding:20px;">
+          <div style="text-align:center; margin-bottom:14px;">
+            <div style="font-size:36px; margin-bottom:4px;">🔐</div>
+            <strong style="font-size:15px; color:#0f172a;">Đăng Nhập Cổng Giáo Viên</strong>
+            <p style="font-size:11px; color:#64748b; margin-top:4px;">
+              Vui lòng nhập tài khoản giáo viên để xem toàn bộ ngân hàng đề thi, mã Apps Script và tệp HTML:
+            </p>
+          </div>
+
+          <div class="input-group">
+            <label style="font-size:12px; font-weight:700; color:#334155;">Tên đăng nhập:</label>
+            <input type="text" id="gv-username-input" class="input-control" placeholder="Tên đăng nhập..." autocomplete="username">
+          </div>
+
+          <div class="input-group">
+            <label style="font-size:12px; font-weight:700; color:#334155;">Mật khẩu:</label>
+            <input type="password" id="gv-password-input" class="input-control" placeholder="Mật khẩu..." autocomplete="current-password">
+          </div>
+
+          <span id="gv-login-error" style="font-size:11px; color:#e11d48; font-weight:700; display:block; min-height:16px; margin-bottom:8px;"></span>
+
+          <button id="btn-gv-login" class="btn btn-primary" style="padding:10px; font-weight:800;">
+            Đăng Nhập
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW 2: AUTHENTICATED GV PANEL CONTENT -->
+      <div id="gv-panel-content" class="hidden">
+        
+        <!-- Teacher Profile & Logout -->
+        <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border:1px solid #bae6fd; border-radius:14px; padding:10px 14px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">✨</span>
+            <div>
+              <strong style="color:#0369a1; font-size:13px;">Giáo Viên: Mai Hằng</strong>
+              <span style="font-size:11px; color:#047857; background:#dcfce7; padding:2px 6px; border-radius:6px; font-weight:700; margin-left:6px;">Đã Xác Thực</span>
+            </div>
+          </div>
+          <button id="btn-gv-logout" class="btn btn-secondary" style="width:auto; padding:4px 10px; font-size:11px;">
+            Đăng xuất
+          </button>
+        </div>
+
+        <!-- TABS NAVIGATION -->
+        <div style="display:flex; gap:6px; overflow-x:auto; margin-bottom:14px; padding-bottom:4px; border-bottom:1px solid #e2e8f0;">
+          <button id="tab-btn-apps" class="btn btn-primary" style="width:auto; padding:8px 16px; font-size:12px;">
+            📊 Mã Google Apps Script
+          </button>
+          <button id="tab-btn-html" class="btn btn-secondary" style="width:auto; padding:8px 16px; font-size:12px;">
+            💾 Tệp HTML Offline
+          </button>
+        </div>
+
+        <!-- TAB 1: MÃ GOOGLE APPS SCRIPT -->
+        <div id="tab-pane-apps">
+          <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:12px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:8px; flex-wrap:wrap;">
+              <strong style="color:#065f46; font-size:13px;">📋 Mã Google Apps Script Tích Hợp Sheet BAI TEST THU</strong>
+              <button id="btn-copy-apps-script" class="btn btn-emerald" style="width:auto; padding:6px 12px; font-size:11px;">
+                📋 Sao Chép Mã Apps Script
+              </button>
+            </div>
+            <p style="font-size:11px; color:#064e3b; line-height:1.4; margin-bottom:10px;">
+              Dán mã này vào <strong>Tiện ích mở rộng &gt; Apps Script</strong> trong Google Sheet ID <code>1vy8REFua2caqCRXtxYrvHQIw1mA83vkS03evT3T4Wus</code>. Khi học sinh thi xong, hệ thống tự động mở sheet <strong>BAI TEST THU</strong>, tìm đúng <strong>Tên HS</strong>, <strong>Lớp</strong>, <strong>Mã học sinh</strong> và ghi tiếp từ <strong>cột D trở đi</strong>: Thời gian đăng nhập, Mã đề thi, Loại đề thi, Thời gian làm bài, Điểm thi lần 1, Điểm thi lần 2...
+            </p>
+            <div style="background:#ffffff; border:1px solid #a7f3d0; border-radius:10px; padding:10px;">
+              <label for="gv-webhook-url-input" style="display:block; font-size:11px; font-weight:700; color:#065f46; margin-bottom:4px;">
+                🔗 URL Web App Apps Script (/exec):
+              </label>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <input type="text" id="gv-webhook-url-input" class="input-control" style="flex:1; min-width:220px; padding:6px 10px; font-size:11px; font-family:monospace;" placeholder="https://script.google.com/macros/s/.../exec">
+                <button id="btn-save-webhook-url" class="btn btn-primary" style="width:auto; padding:6px 12px; font-size:11px;">Lưu URL</button>
+                <button id="btn-test-webhook-url" class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:11px;">Kiểm tra kết nối</button>
+              </div>
+              <span id="gv-webhook-status" style="display:block; font-size:10px; color:#047857; margin-top:4px;"></span>
+              <div style="font-size:10px; color:#475569; margin-top:6px; line-height:1.4;">
+                ⚠️ Lưu ý khi <strong>Triển khai &gt; Triển khai mới &gt; Ứng dụng web</strong> trong Apps Script: mục <strong>Thực thi dưới danh nghĩa</strong> chọn <em>Tôi</em> và mục <strong>Người có quyền truy cập</strong> bắt buộc chọn <strong>Bất kỳ ai</strong> (Anyone), nếu không Google sẽ chặn lỗi 403 khi học sinh nộp bài.
+              </div>
+            </div>
+          </div>
+          <pre id="gv-apps-script-code" style="background:#0f172a; color:#f8fafc; padding:14px; border-radius:12px; font-family:monospace; font-size:11px; overflow-x:auto; max-height:48vh; line-height:1.5;"></pre>
+        </div>
+
+        <!-- TAB 4: TỆP HTML OFFLINE -->
+        <div id="tab-pane-html" class="hidden">
+          <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:14px; padding:14px; margin-bottom:14px;">
+            <h4 style="font-size:13px; font-weight:800; color:#0369a1; margin-bottom:4px;">
+              💾 Tệp HTML EduSecure Offline Đầy Đủ
+            </h4>
+            <p style="font-size:11px; color:#475569; margin-bottom:12px; line-height:1.5;">
+              Tệp HTML này bao gồm toàn bộ CSS, HTML, JavaScript, cơ chế giám sát gian lận, danh sách 4 lớp và 2 bộ đề. Có thể chép vào USB, máy tính phòng máy hoặc máy học sinh để chạy offline hoàn toàn không cần kết nối mạng.
+            </p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button id="btn-download-html" class="btn btn-primary" style="width:auto; padding:8px 16px; font-size:12px;">
+                ⬇️ Tải Tệp HTML Về Máy
+              </button>
+              <button id="btn-copy-html-code" class="btn btn-secondary" style="width:auto; padding:8px 16px; font-size:12px;">
+                📋 Sao Chép Toàn Bộ Mã HTML
+              </button>
+            </div>
+          </div>
+          <div style="font-size:11px; color:#64748b;">
+            💡 <strong>Hướng dẫn sử dụng tệp HTML:</strong> Sau khi tải về, chỉ cần nhấp đúp vào tệp <code>.html</code> để mở trên bất kỳ trình duyệt nào (Chrome, Cốc Cốc, Edge, Safari) mà không cần cài đặt thêm phần mềm.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT DATA & ENGINE -->
+  <script>
+    // =========================================================================
+    // 1. NGÂN HÀNG CÂU HỎI BÀI 7 (20 CÂU TRẮC NGHIỆM - CÔNG NGHỆ 10)
+    // =========================================================================
+    const TABLE_7_1_HTML = `
+      <div style="font-size:12px; font-weight:800; color:#0369a1; margin-bottom:4px;">
+        Bảng 7.1. Xu hướng việc làm của một số ngành nghề kĩ thuật, công nghệ giai đoạn 2015–2020
+      </div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:11px; background:#ffffff; margin-top:4px;">
+          <thead>
+            <tr style="background:#e0f2fe; color:#0c4a6e;">
+              <th style="border:1px solid #bae6fd; padding:6px 8px; text-align:left;">Thống kê thị trường lao động nghề nghiệp kĩ thuật, công nghệ</th>
+              <th style="border:1px solid #bae6fd; padding:6px; text-align:center;">2015</th>
+              <th style="border:1px solid #bae6fd; padding:6px; text-align:center;">2017</th>
+              <th style="border:1px solid #bae6fd; padding:6px; text-align:center;">2018</th>
+              <th style="border:1px solid #bae6fd; padding:6px; text-align:center;">2019</th>
+              <th style="border:1px solid #bae6fd; padding:6px; text-align:center;">2020</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#f8fafc;">
+              <td colspan="6" style="border:1px solid #bae6fd; padding:5px 8px; font-weight:700; color:#334155;">Theo nghề nghiệp (đơn vị tính: nghìn người)</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #bae6fd; padding:5px 8px;">Nông, lâm, ngư nghiệp</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">5 396,5</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">5 158,9</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">4 984,6</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">4 008,1</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">3 938,2</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #bae6fd; padding:5px 8px;">Công nghiệp (thợ lắp ráp, vận hành máy móc thiết bị)</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">4 605,5</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">5 275,0</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">5 494,2</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">6 603,6</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">7 100,4</td>
+            </tr>
+            <tr style="background:#f8fafc;">
+              <td colspan="6" style="border:1px solid #bae6fd; padding:5px 8px; font-weight:700; color:#334155;">Theo ngành kinh tế (đơn vị tính: % số lao động)</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #bae6fd; padding:5px 8px;">Khai khoáng</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">0,4</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">0,4</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">0,4</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">0,4</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">0,3</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #bae6fd; padding:5px 8px;">Công nghiệp chế biến, chế tạo</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">15,9</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">17,8</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">18,4</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">20,7</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">21,1</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #bae6fd; padding:5px 8px;">Xây dựng</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">6,2</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">7,5</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">7,9</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">8,4</td>
+              <td style="border:1px solid #bae6fd; padding:5px 6px; text-align:right;">8,8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:10px; color:#64748b; margin-top:4px; text-align:right; font-style:italic;">
+        (Nguồn: Niên giám thống kê Việt Nam năm 2020)
+      </div>
+    `;
+
+    // Bộ 20 câu hỏi Bài 7 - Đáp án đúng đặt ở opts[0] trước khi trộn ngẫu nhiên
+    const BAI7_BANK_20 = [
+      {
+        id: 1,
+        level: 'Thông hiểu',
+        question: 'Nhận định nào sau đây phản ánh đầy đủ nhất vai trò của ngành nghề kĩ thuật, công nghệ đối với xã hội?',
+        opts: [
+          'Tạo ra của cải, dịch vụ, thúc đẩy kinh tế và cải thiện chất lượng cuộc sống.',
+          'Chủ yếu nghiên cứu, cải tiến thiết bị nhằm nâng cao hiệu quả sản xuất.',
+          'Chủ yếu tạo ra sản phẩm công nghiệp và phát triển hệ thống máy móc.',
+          'Phát triển các thiết bị hiện đại để thay thế lao động trong sản xuất.'
+        ],
+        exp: 'Ngành nghề kĩ thuật, công nghệ đóng vai trò tạo ra của cải vật chất, dịch vụ phục vụ đời sống, thúc đẩy phát triển kinh tế và nâng cao chất lượng cuộc sống.'
+      },
+      {
+        id: 2,
+        level: 'Nhận biết',
+        question: 'Đặc điểm nào sau đây phù hợp với phạm vi hoạt động của ngành nghề kĩ thuật, công nghệ?',
+        opts: [
+          'Có mặt trong nhiều lĩnh vực sản xuất như công nghiệp, nông nghiệp và thủy sản.',
+          'Tập trung chủ yếu vào các hoạt động chế tạo máy và sản xuất công nghiệp.',
+          'Chủ yếu tham gia nghiên cứu và phát triển các thiết bị công nghệ hiện đại.',
+          'Tập trung vào sản xuất công nghiệp và các hoạt động bảo trì thiết bị.'
+        ],
+        exp: 'Ngành nghề kĩ thuật, công nghệ hiện diện rộng rãi trong nhiều lĩnh vực sản xuất khác nhau như công nghiệp, nông nghiệp, lâm nghiệp và thủy sản.'
+      },
+      {
+        id: 3,
+        level: 'Thông hiểu',
+        question: 'Điểm khác biệt cơ bản giữa ngành cơ khí và ngành điện, điện tử, viễn thông được thể hiện rõ nhất ở nội dung nào?',
+        opts: [
+          'Đối tượng và hệ thống kĩ thuật mà người lao động thiết kế, vận hành.',
+          'Mức độ sử dụng thiết bị và phần mềm trong quá trình làm việc.',
+          'Khả năng ứng dụng các thành tựu khoa học vào hoạt động sản xuất.',
+          'Yêu cầu tuân thủ quy định về an toàn trong môi trường lao động.'
+        ],
+        exp: 'Ngành cơ khí làm việc với máy móc, chi tiết cơ khí, đồ gá, khuôn mẫu; còn ngành điện, điện tử, viễn thông làm việc với hệ thống điện, mạch điện tử và mạng truyền thông.'
+      },
+      {
+        id: 4,
+        level: 'Thông hiểu',
+        question: 'Hoạt động nào sau đây đặc trưng nhất cho công việc thuộc ngành cơ khí?',
+        opts: [
+          'Thiết kế quy trình gia công và chế tạo chi tiết máy.',
+          'Thiết kế hệ thống điều khiển điện cho dây chuyền sản xuất.',
+          'Thiết kế mạch điện tử điều khiển động cơ.',
+          'Thiết kế hệ thống truyền tín hiệu giữa các thiết bị.'
+        ],
+        exp: 'Thiết kế quy trình gia công, lắp ráp và chế tạo chi tiết máy là công việc đặc trưng của ngành cơ khí; các phương án còn lại thuộc lĩnh vực điện, điện tử, viễn thông.'
+      },
+      {
+        id: 5,
+        level: 'Nhận biết',
+        question: 'Theo SGK, yêu cầu nào sau đây gắn trực tiếp với khả năng thực hiện công việc của người lao động ngành cơ khí?',
+        opts: [
+          'Đọc bản vẽ, lập quy trình công nghệ và sử dụng thiết bị cơ khí.',
+          'Thiết kế hệ thống đa phương tiện và phát thanh truyền hình.',
+          'Điều khiển các bộ thiết bị lập trình điện tử trong sản xuất.',
+          'Phân tích tín hiệu và vận hành hệ thống mạng viễn thông.'
+        ],
+        exp: 'Người lao động ngành cơ khí cần biết phân tích bản vẽ kĩ thuật, lập quy trình công nghệ gia công và sử dụng thành thạo máy móc, thiết bị cơ khí.'
+      },
+      {
+        id: 6,
+        level: 'Vận dụng',
+        question: 'Một cơ sở sản xuất cần tuyển nhân viên thực hiện công việc lập quy trình công nghệ chế tạo, lắp ráp và sửa chữa các loại đồ gá, khuôn mẫu. Nhân viên này phù hợp nhất với ngành nào?',
+        opts: [
+          'Cơ khí.',
+          'Điện.',
+          'Điện tử.',
+          'Viễn thông.'
+        ],
+        exp: 'Chế tạo, lắp ráp và sửa chữa đồ gá, khuôn mẫu là công việc chuyên môn trực tiếp của ngành cơ khí.'
+      },
+      {
+        id: 7,
+        level: 'Thông hiểu',
+        question: 'Đặc điểm nào sau đây giải thích trực tiếp yêu cầu người lao động ngành cơ khí phải cẩn thận và tuân thủ nghiêm ngặt an toàn lao động?',
+        opts: [
+          'Môi trường làm việc có nhiều nguy cơ gây tai nạn.',
+          'Công việc thường xuyên phải sử dụng các phần mềm thiết kế.',
+          'Công việc đòi hỏi phối hợp giữa nhiều bộ phận sản xuất.',
+          'Công việc cần liên tục cập nhật công nghệ chế tạo mới.'
+        ],
+        exp: 'Ngành cơ khí tiếp xúc thường xuyên với máy cắt gọt, thiết bị áp lực, phôi kim loại và chi tiết chuyển động nên tiềm ẩn nhiều nguy cơ tai nạn lao động.'
+      },
+      {
+        id: 8,
+        level: 'Nhận biết',
+        question: 'Theo SGK, yếu tố nào là cơ sở quan trọng tạo nên triển vọng phát triển của ngành cơ khí?',
+        opts: [
+          'Sự phát triển khoa học kĩ thuật và nhu cầu thay thế công việc bằng máy móc.',
+          'Việc chuyển các hoạt động sản xuất sang sử dụng lao động thủ công.',
+          'Việc giảm sử dụng máy móc trong các lĩnh vực sản xuất và dịch vụ.',
+          'Sự thu hẹp hoạt động sản xuất công nghiệp để phát triển dịch vụ.'
+        ],
+        exp: 'Khoa học kĩ thuật phát triển cùng xu hướng tự động hóa, thay thế lao động thủ công bằng máy móc giúp ngành cơ khí giữ vai trò then chốt và có triển vọng lớn.'
+      },
+      {
+        id: 9,
+        level: 'Nhận biết',
+        question: 'Hoạt động nào sau đây thuộc ngành điện, điện tử và viễn thông theo nội dung giới thiệu trong SGK?',
+        opts: [
+          'Vận hành nhà máy điện gió, điện mặt trời.',
+          'Thiết kế quy trình chế tạo khuôn mẫu cho máy móc.',
+          'Lập quy trình gia công và lắp ráp chi tiết cơ khí.',
+          'Thiết kế đồ gá phục vụ sản xuất cơ khí.'
+        ],
+        exp: 'Vận hành nhà máy phát điện (như điện gió, điện mặt trời) thuộc ngành điện trong nhóm ngành điện, điện tử và viễn thông.'
+      },
+      {
+        id: 10,
+        level: 'Nhận biết',
+        question: 'Người lao động ngành điện, điện tử và viễn thông cần có khả năng nào sau đây?',
+        opts: [
+          'Sử dụng thiết bị đo kiểm, lắp ráp mạch điện và điện tử.',
+          'Thiết kế quy trình đúc, rèn và gia công chi tiết máy.',
+          'Lập quy trình chế tạo khuôn mẫu và đồ gá cơ khí.',
+          'Phân tích bản vẽ và chế tạo các chi tiết máy.'
+        ],
+        exp: 'Kĩ năng sử dụng dụng cụ, thiết bị đo kiểm để lắp ráp, sửa chữa mạch điện và điện tử là yêu cầu đặc trưng của ngành điện, điện tử và viễn thông.'
+      },
+      {
+        id: 11,
+        level: 'Thông hiểu',
+        question: 'Công việc nào sau đây phù hợp nhất với người lao động có chuyên môn về điện tử và điều khiển trong công nghiệp?',
+        opts: [
+          'Lắp ráp và kiểm tra mạch điện tử điều khiển dây chuyền.',
+          'Thiết kế quy trình gia công vỏ hộp thiết bị điều khiển.',
+          'Chế tạo các bộ phận cơ khí của dây chuyền sản xuất.',
+          'Lắp đặt và bảo trì kết cấu cơ khí của hệ thống máy.'
+        ],
+        exp: 'Lắp ráp và kiểm tra mạch điện tử điều khiển dây chuyền gắn trực tiếp với chuyên môn điện tử và điều khiển tự động.'
+      },
+      {
+        id: 12,
+        level: 'Nhận biết',
+        question: 'Theo SGK, yếu tố nào sau đây góp phần làm tăng nhu cầu nhân lực ngành điện, điện tử và viễn thông?',
+        opts: [
+          'Sự phát triển của thiết bị thông minh và hệ thống mạng viễn thông.',
+          'Sự phát triển của các công nghệ gia công kim loại truyền thống.',
+          'Sự gia tăng nhu cầu chế tạo khuôn mẫu và đồ gá cơ khí.',
+          'Sự mở rộng của các hoạt động lắp ráp cơ khí thủ công.'
+        ],
+        exp: 'Sự bùng nổ của thiết bị thông minh, IoT, năng lượng tái tạo và hạ tầng mạng viễn thông làm nhu cầu nhân lực ngành điện, điện tử và viễn thông tăng mạnh.'
+      },
+      {
+        id: 13,
+        level: 'Vận dụng',
+        question: 'Một học sinh có khả năng phân tích bản vẽ, yêu thích máy móc, muốn tham gia thiết kế và chế tạo chi tiết máy. Hướng nghề nghiệp nào sau đây phù hợp nhất?',
+        opts: [
+          'Kĩ thuật cơ khí chế tạo.',
+          'Kĩ thuật viễn thông.',
+          'Kĩ thuật phát thanh truyền hình.',
+          'Kĩ thuật mạng truyền thông.'
+        ],
+        exp: 'Phân tích bản vẽ cơ khí, yêu thích máy móc và chế tạo chi tiết máy phù hợp trực tiếp với ngành Kĩ thuật cơ khí chế tạo.'
+      },
+      {
+        id: 14,
+        level: 'Vận dụng',
+        question: 'Khi đánh giá mức độ phù hợp của bản thân với một ngành nghề kĩ thuật, công nghệ, học sinh cần xem xét những yếu tố nào?',
+        opts: [
+          'Sở thích, năng lực, cá tính, giá trị nghề nghiệp và thông tin tuyển dụng.',
+          'Sở thích, điều kiện tuyển sinh, mức thu nhập và quy mô doanh nghiệp.',
+          'Năng lực học tập, mức thu nhập, vị trí việc làm và nơi đào tạo.',
+          'Cá tính, cơ hội việc làm, mức lương và nhu cầu tuyển dụng hiện tại.'
+        ],
+        exp: 'Đánh giá sự phù hợp nghề nghiệp cần kết hợp cả yếu tố bên trong (sở thích, năng lực, cá tính, giá trị nghề nghiệp) và yếu tố thị trường (thông tin tuyển dụng, đào tạo).'
+      },
+      {
+        id: 15,
+        level: 'Nhận biết',
+        question: 'Người lao động thuộc ngành cơ khí có thể làm việc tại các cơ sở nào?',
+        opts: [
+          'Trường học, viện nghiên cứu, nhà máy sản xuất và doanh nghiệp.',
+          'Công ti điện lực, bưu chính viễn thông và phòng thí nghiệm điện tử.',
+          'Cơ sở viễn thông, nhà máy điện và đơn vị điều khiển tự động hóa.',
+          'Trung tâm truyền thông, đơn vị phát thanh và cơ sở điện tử.'
+        ],
+        exp: 'Kĩ sư và công nhân ngành cơ khí làm việc tại các nhà máy, xí nghiệp sản xuất cơ khí, doanh nghiệp kĩ thuật, viện nghiên cứu và cơ sở đào tạo.'
+      },
+      {
+        id: 16,
+        level: 'Nhận biết',
+        question: 'Người lao động thuộc ngành điện, điện tử và viễn thông có thể làm việc tại các cơ sở nào?',
+        opts: [
+          'Công ti điện lực, bưu chính viễn thông và đơn vị tự động hóa.',
+          'Xưởng chế tạo khuôn mẫu, nhà máy gia công và cơ sở hàn.',
+          'Xưởng chế tạo chi tiết máy, cơ sở gia công và nhà máy cơ khí.',
+          'Cơ sở chế tạo đồ gá, nhà máy lắp ráp cơ khí và xưởng đúc.'
+        ],
+        exp: 'Người lao động ngành điện, điện tử, viễn thông làm việc tại công ti điện lực, nhà máy điện, bưu chính viễn thông, đơn vị tự động hóa và sản xuất linh kiện điện tử.'
+      },
+      {
+        id: 17,
+        level: 'Vận dụng',
+        hasTable: true,
+        question: 'Căn cứ Bảng 7.1, số lao động thuộc nhóm công nghiệp (thợ lắp ráp, vận hành máy móc thiết bị) thay đổi như thế nào từ năm 2015 đến năm 2020?',
+        opts: [
+          'Tăng khoảng 2,5 triệu người.',
+          'Tăng khoảng 1,5 triệu người.',
+          'Tăng khoảng 2,0 triệu người.',
+          'Tăng khoảng 3,0 triệu người.'
+        ],
+        exp: 'Năm 2015 là 4 605,5 nghìn người; năm 2020 là 7 100,4 nghìn người. Mức tăng: 7 100,4 − 4 605,5 = 2 494,9 nghìn người ≈ 2,5 triệu người.'
+      },
+      {
+        id: 18,
+        level: 'Vận dụng',
+        hasTable: true,
+        question: 'Theo Bảng 7.1, tỉ lệ lao động trong ngành công nghiệp chế biến, chế tạo năm 2020 cao hơn năm 2015 bao nhiêu điểm phần trăm?',
+        opts: [
+          '5,2 điểm phần trăm.',
+          '4,2 điểm phần trăm.',
+          '6,2 điểm phần trăm.',
+          '5,8 điểm phần trăm.'
+        ],
+        exp: 'Tỉ lệ lao động ngành công nghiệp chế biến, chế tạo năm 2020 là 21,1% và năm 2015 là 15,9%. Chênh lệch: 21,1 − 15,9 = 5,2 điểm phần trăm.'
+      },
+      {
+        id: 19,
+        level: 'Thông hiểu',
+        hasTable: true,
+        question: 'Căn cứ Bảng 7.1, nhận xét nào sau đây đúng về xu hướng lao động giai đoạn 2015–2020?',
+        opts: [
+          'Lao động nông, lâm, ngư nghiệp giảm; lao động công nghiệp tăng.',
+          'Lao động nông, lâm, ngư nghiệp tăng; lao động công nghiệp giảm.',
+          'Lao động nông, lâm, ngư nghiệp và công nghiệp đều tăng.',
+          'Lao động nông, lâm, ngư nghiệp và công nghiệp đều giảm.'
+        ],
+        exp: 'Từ 2015 đến 2020, lao động nông, lâm, ngư nghiệp giảm từ 5 396,5 xuống 3 938,2 nghìn người, còn lao động công nghiệp tăng từ 4 605,5 lên 7 100,4 nghìn người.'
+      },
+      {
+        id: 20,
+        level: 'Thông hiểu',
+        hasTable: true,
+        question: 'Căn cứ Bảng 7.1, nhận xét nào sau đây đúng về tỉ lệ lao động theo ngành kinh tế trong giai đoạn 2015–2020?',
+        opts: [
+          'Công nghiệp chế biến, chế tạo tăng; xây dựng tăng; khai khoáng giảm nhẹ.',
+          'Công nghiệp chế biến, chế tạo tăng; xây dựng giảm; khai khoáng ổn định.',
+          'Công nghiệp chế biến, chế tạo giảm; xây dựng tăng; khai khoáng giảm.',
+          'Công nghiệp chế biến, chế tạo tăng; xây dựng ổn định; khai khoáng tăng.'
+        ],
+        exp: 'Giai đoạn 2015–2020: công nghiệp chế biến, chế tạo tăng (15,9% → 21,1%), xây dựng tăng (6,2% → 8,8%), khai khoáng giảm nhẹ (0,4% → 0,3%).'
+      }
+    ];
+
+    const EMPTY_EXAM = {
+      type: 'none',
+      title: 'Chưa có đề thi',
+      subject: '',
+      durationSec: 0,
+      totalPoints: 10.0,
+      passScore: 5.0,
+      questions: []
+    };
+
+    // Array shuffler (Fisher-Yates)
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function buildBai7Exam10() {
+      const nbPool = shuffle(BAI7_BANK_20.filter(q => q.level === 'Nhận biết')).slice(0, 4);
+      const thPool = shuffle(BAI7_BANK_20.filter(q => q.level === 'Thông hiểu')).slice(0, 3);
+      const vdPool = shuffle(BAI7_BANK_20.filter(q => q.level === 'Vận dụng')).slice(0, 3);
+      const selected = shuffle([...nbPool, ...thPool, ...vdPool]);
+
+      const questions = selected.map((item, idx) => {
+        const correctText = item.opts[0];
+        const shuffledOpts = shuffle(item.opts);
+        const correctIdx = shuffledOpts.indexOf(correctText);
+        return {
+          id: item.id,
+          type: 'mc',
+          level: item.level,
+          question: `Câu ${idx + 1}: ${item.question}`,
+          ctxHtml: item.hasTable ? TABLE_7_1_HTML : '',
+          options: shuffledOpts,
+          correct: correctIdx,
+          exp: item.exp
+        };
+      });
+
+      return {
+        type: 'bai7_10',
+        title: 'BÀI 7: NGÀNH NGHỀ KĨ THUẬT, CÔNG NGHỆ (10 CÂU)',
+        subject: 'Bài 7 (10 câu)',
+        durationSec: 10 * 60,
+        totalPoints: 10.0,
+        passScore: 5.0,
+        questions
+      };
+    }
+
+    // =========================================================================
+    // 4. ROOM STATUS MANAGEMENT
+    // =========================================================================
+    const ROOM_STATUS_KEY = 'edusecure_room_status';
+    let roomStatus = { exam1Open: true, exam2Open: true };
+
+    function loadRoomStatus() {
+      roomStatus = { exam1Open: true, exam2Open: true };
+      applyRoomStatusUI();
+    }
+
+    function saveRoomStatus() {
+      try {
+        localStorage.setItem(ROOM_STATUS_KEY, JSON.stringify(roomStatus));
+      } catch (e) {}
+      // Broadcast to other tabs
+      try {
+        if ('BroadcastChannel' in window) {
+          const channel = new BroadcastChannel('edusecure_channel');
+          channel.postMessage({ type: 'STATUS_SYNC', status: roomStatus });
+        }
+      } catch (e) {}
+      applyRoomStatusUI();
+    }
+
+    // Listen for storage events / BroadcastChannel
+    window.addEventListener('storage', (e) => {
+      if (e.key === ROOM_STATUS_KEY) {
+        loadRoomStatus();
+      }
+    });
+    try {
+      if ('BroadcastChannel' in window) {
+        const channel = new BroadcastChannel('edusecure_channel');
+        channel.onmessage = (e) => {
+          if (e.data && e.data.type === 'STATUS_SYNC') {
+            roomStatus = e.data.status;
+            applyRoomStatusUI();
+          }
+        };
+      }
+    } catch (e) {}
+
+    function applyRoomStatusUI() {
+      const banner = document.getElementById('room-status-banner');
+      const indicator = document.getElementById('room-status-indicator');
+      const text = document.getElementById('room-status-text');
+
+      if (banner && indicator && text) {
+        banner.className = 'room-status-bar both-open';
+        indicator.style.background = '#16a34a';
+        text.innerHTML = '<strong>Phòng Thi Đang Mở:</strong> Đề Thi Bài 7 (10 câu trắc nghiệm chọn ngẫu nhiên từ bộ 20 câu) đã sẵn sàng. Chỉ nộp bài sau khi hoàn thành đủ 10/10 câu hỏi.';
+      }
+
+      updateTeacherPanelUI();
+    }
+
+    function updateTeacherPanelUI() {
+      const label1 = document.getElementById('t-exam1-status-label');
+      const btn1 = document.getElementById('btn-toggle-t-exam1');
+      if (label1 && btn1) {
+        if (roomStatus.exam1Open) {
+          label1.innerHTML = '● Đang Mở Cho Học Sinh Thi';
+          label1.style.color = '#15803d';
+          btn1.className = 'btn btn-danger';
+          btn1.textContent = 'Tắt Đề 1 (Khóa)';
+        } else {
+          label1.innerHTML = '○ Đang Tắt (Học sinh thấy Chưa được vào thi)';
+          label1.style.color = '#b91c1c';
+          btn1.className = 'btn btn-primary';
+          btn1.textContent = 'Mở Đề 1 (Cho Thi)';
+        }
+      }
+
+      const label2 = document.getElementById('t-exam2-status-label');
+      const btn2 = document.getElementById('btn-toggle-t-exam2');
+      if (label2 && btn2) {
+        if (roomStatus.exam2Open) {
+          label2.innerHTML = '● Đang Mở Cho Học Sinh Thi';
+          label2.style.color = '#15803d';
+          btn2.className = 'btn btn-danger';
+          btn2.textContent = 'Tắt Đề 2 (Khóa)';
+        } else {
+          label2.innerHTML = '○ Đang Tắt (Học sinh thấy Chưa được vào thi)';
+          label2.style.color = '#b91c1c';
+          btn2.className = 'btn btn-emerald';
+          btn2.textContent = 'Mở Đề 2 (Cho Thi)';
+        }
+      }
+    }
+
+    // =========================================================================
+    // 5. GLOBAL APP STATE & REFS
+    // =========================================================================
+    let CURRENT_EXAM = { ...EMPTY_EXAM };
+    let QUESTIONS = CURRENT_EXAM.questions;
+    let currentIdx = 0;
+    let userAnswers = {};
+    let strikes = [];
+    let remaining = 10 * 60;
+    let timer = null;
+    let isActive = false;
+    let student = { name: '', code: '', class: '10C05' };
+    let lastViolation = 0;
+    let isConfirmingSubmit = false;
+
+    // Elements
+    const viewLogin = document.getElementById('view-login');
+    const viewLobby = document.getElementById('view-lobby');
+    const viewExam = document.getElementById('view-exam');
+    const viewResult = document.getElementById('view-result');
+    const mobileBar = document.getElementById('mobile-bar');
+    const simDock = document.getElementById('sim-dock');
+    const alertModal = document.getElementById('alert-modal');
+    const blurShield = document.getElementById('blur-shield');
+    const teacherModal = document.getElementById('teacher-modal');
+    const submitConfirmModal = document.getElementById('submit-confirm-modal');
+
+    const STUDENT_STORAGE_KEY = 'edusecure_student_login';
+
+    // =========================================================================
+    // 6. 4-CLASS ROSTER
+    // =========================================================================
+    const ROSTER = {
+      '10C05': [
+        {code:'1',name:'Lê Hồng Hải Anh'},{code:'2',name:'Nguyễn Ngọc Mỹ Anh'},{code:'3',name:'Nguyễn Bùi Thiên Ân'},
+        {code:'4',name:'Lê Gia Bảo'},{code:'5',name:'Nguyễn Gia Bảo'},{code:'6',name:'Hoàng Minh Cảnh'},
+        {code:'7',name:'Võ Ngọc Minh Châu'},{code:'8',name:'Nguyễn Ngọc Thùy Dương'},{code:'9',name:'Trần Tiến Đạt'},
+        {code:'10',name:'Bùi Hoàng Hải'},{code:'11',name:'Vòng Quân Hải'},{code:'12',name:'Phạm Lê Nhã Hân'},
+        {code:'13',name:'Đặng Kim Hiền'},{code:'14',name:'Lê Thị Cẩm Hiền'},{code:'15',name:'Đặng Nhựt Huy'},
+        {code:'16',name:'Trần Nguyễn Mai Ka'},{code:'17',name:'Lê Uyên Khanh'},{code:'18',name:'Trần Ngọc Ngân Khánh'},
+        {code:'19',name:'Nguyễn Đăng Khoa'},{code:'20',name:'Trần Quốc Kiệt'},{code:'21',name:'Dương Ngọc Linh'},
+        {code:'22',name:'Nguyễn Đỗ Phương Linh'},{code:'23',name:'Nguyễn Hoàng Khánh Linh'},{code:'24',name:'Võ Ngọc Yến Linh'},
+        {code:'25',name:'Lê Thành Nam'},{code:'26',name:'Lê Kim Ngân'},{code:'27',name:'Lê Trọng Nghĩa'},
+        {code:'28',name:'Mai Thị Kim Ngọc'},{code:'29',name:'Huỳnh Nguyễn Minh Nguyên'},{code:'30',name:'Nguyễn An Nhi'},
+        {code:'31',name:'Nguyễn Lê Yến Nhi'},{code:'32',name:'Lê Hoàng Phúc'},{code:'33',name:'Lôi Bảo Phúc'},
+        {code:'34',name:'Nguyễn Phương Quỳnh'},{code:'35',name:'Nguyễn Minh Sang'},{code:'36',name:'Giang Minh Thiện'},
+        {code:'37',name:'Huỳnh Lê Phúc Thịnh'},{code:'38',name:'Trần Anh Thư'},{code:'39',name:'Trần Thùy Tiên'},
+        {code:'40',name:'Trịnh Nguyễn Bảo Tiên'},{code:'41',name:'Nguyễn Thị Huyền Trang'},{code:'42',name:'Nguyễn Ngọc Trâm'},
+        {code:'43',name:'Trần Thị Bảo Trân'},{code:'44',name:'Mai Thị Phương Trinh'},{code:'45',name:'Nguyễn Hoàng Nhật Vi'},
+        {code:'46',name:'Trần Nguyễn Khánh Vy'}
+      ],
+      '10C06': [
+        {code:'1',name:'Đỗ Đăng An'},{code:'2',name:'Nguyễn Thuận An'},{code:'3',name:'Hoàng Lê Tú Anh'},
+        {code:'4',name:'Phạm Vũ Thùy Anh'},{code:'5',name:'Trần Hải Anh'},{code:'6',name:'Trần Lê Nam Anh'},
+        {code:'7',name:'Vũ Đình Hải Anh'},{code:'8',name:'Nguyễn Đức Bảo'},{code:'9',name:'Lê Nguyễn Băng Châu'},
+        {code:'10',name:'Phan Nguyễn Bảo Chi'},{code:'11',name:'Lê Thụy Ánh Dương'},{code:'12',name:'Trần Anh Hào'},
+        {code:'13',name:'Nguyễn Ngọc Bảo Hân'},{code:'14',name:'Nguyễn Văn Hoàng'},{code:'15',name:'Mai Trần Minh Huy'},
+        {code:'16',name:'Hoàng Quốc An Khang'},{code:'17',name:'Nguyễn Tuấn Khang'},{code:'18',name:'Phạm Hoàng Khang'},
+        {code:'19',name:'Lê Anh Khôi'},{code:'20',name:'Đường Hà Khuê'},{code:'21',name:'Lê Hoàng Thiên Kim'},
+        {code:'22',name:'Nguyễn Ngọc Thảo Ly'},{code:'23',name:'Nguyễn Hoàn Kim Ngân'},{code:'24',name:'Phạm Thị Kim Ngân'},
+        {code:'25',name:'Phạm Thị Ngọc Ngân'},{code:'26',name:'Phạm Nguyễn Bảo Ngọc'},{code:'27',name:'Phạm Trần Bảo Ngọc'},
+        {code:'28',name:'Lê Văn Nhất'},{code:'29',name:'Cao Khả Nhi'},{code:'30',name:'Trương Ngọc Tường Như'},
+        {code:'31',name:'Lê Tiến Phát'},{code:'32',name:'Nguyễn Tấn Phát'},{code:'33',name:'Lý Gia Phú'},
+        {code:'34',name:'Đỗ Xuân Phúc'},{code:'35',name:'Nguyễn Khánh Phương'},{code:'36',name:'Ngô Trần Lệ Quyên'},
+        {code:'37',name:'Nguyễn Tấn Tài'},{code:'38',name:'Lê Nguyễn Thanh Tâm'},{code:'39',name:'Lê Nguyễn Minh Thiện'},
+        {code:'40',name:'Phạm Phương Thùy'},{code:'41',name:'Nguyễn Anh Thư'},{code:'42',name:'Đào Bảo Trân'},
+        {code:'43',name:'Nguyễn Ngọc Bảo Trân'},{code:'44',name:'Võ Huỳnh Bảo Trân'},{code:'45',name:'Trần Tấn Minh Trí'},
+        {code:'46',name:'Lê Thanh Tú'},{code:'47',name:'Văn Gia Tuấn'},{code:'48',name:'Nguyễn Hoàng Lê Vy'}
+      ],
+      '10C07': [
+        {code:'1',name:'Đinh Hoàng Thảo Anh'},{code:'2',name:'Mai Trần Huyền Anh'},{code:'3',name:'Nguyễn Quỳnh Anh'},
+        {code:'4',name:'Nguyễn Trần Phương Anh'},{code:'5',name:'Nguyễn Trần Tuấn Anh'},{code:'6',name:'Trần Ngọc Mai Anh'},
+        {code:'7',name:'Lê Ngọc Minh Châu'},{code:'8',name:'Bùi Thị Hồng Diễm'},{code:'9',name:'Trần Quốc Đạt'},
+        {code:'10',name:'Vương Gia Hào'},{code:'11',name:'Lê Nguyễn Bảo Hân'},{code:'12',name:'Nguyễn Hoàng Gia Hân'},
+        {code:'13',name:'Phạm Hà Ngọc Hân'},{code:'14',name:'Trần Nguyễn Gia Hân'},{code:'15',name:'Nguyễn Khắc Huy'},
+        {code:'16',name:'Huỳnh Lê Phúc Khang'},{code:'17',name:'Nguyễn Bảo Khang'},{code:'18',name:'Nguyễn Anh Khoa'},
+        {code:'19',name:'Vũ Đăng Khoa'},{code:'20',name:'Lê Nguyễn Ngọc Lam'},{code:'21',name:'Nguyễn Thùy Linh'},
+        {code:'22',name:'Ôn Ngọc Yến Linh'},{code:'23',name:'Chu Bảo Long'},{code:'24',name:'Nguyễn Chí Long'},
+        {code:'25',name:'Trần Xuân Mai'},{code:'26',name:'Ngô Nhật Mẫn'},{code:'27',name:'Vương Hoàng My'},
+        {code:'28',name:'Trần Kim Ngân'},{code:'29',name:'Nguyễn Bảo Ngọc'},{code:'30',name:'Đinh Vũ Thảo Nguyên'},
+        {code:'31',name:'Nguyễn Bùi Thảo Nguyên'},{code:'32',name:'Phạm Cao Nguyên'},{code:'33',name:'Trần Khôi Nguyên'},
+        {code:'34',name:'Bùi Võ Yến Nhi'},{code:'35',name:'Nguyễn Thái Tuệ Nhi'},{code:'36',name:'Trần Lê Yến Nhi'},
+        {code:'37',name:'Đặng Tố Hoàng Phúc'},{code:'38',name:'Võ Trần An Phúc'},{code:'39',name:'Hoàng Minh Anh Phương'},
+        {code:'40',name:'Trần Đức Thắng'},{code:'41',name:'Nguyễn Thụy Mai Thy'},{code:'42',name:'Trần Phạm Khánh Thy'},
+        {code:'43',name:'Huỳnh Ngọc Bảo Trâm'},{code:'44',name:'Nguyễn Thanh Tuấn'},{code:'45',name:'Ngô Nguyễn Tường Vy'},
+        {code:'46',name:'Nguyễn Hoàng Thảo Vy'},{code:'47',name:'Đỗ Như Ý'},{code:'48',name:'Nguyễn Như Ý'}
+      ],
+      '10C08': [
+        {code:'1',name:'Đinh Vũ Bảo Anh'},{code:'2',name:'Lềnh Trâm Anh'},{code:'3',name:'Mai Nhật Tường Anh'},
+        {code:'4',name:'Nguyễn Ngọc Trâm Anh'},{code:'5',name:'Trần Thị Tú Anh'},{code:'6',name:'Lê Hoàng Gia Bảo'},
+        {code:'7',name:'Trần An Bình'},{code:'8',name:'Mai Tiến Đạt'},{code:'9',name:'Đoàn Tâm Đoan'},
+        {code:'10',name:'Đoàn Minh Đức'},{code:'11',name:'Lê Ngân Giang'},{code:'12',name:'Tôn Nữ Bảo Hân'},
+        {code:'13',name:'Đồng Văn Hậu'},{code:'14',name:'Nguyễn Kim Hoàng'},{code:'15',name:'Nguyễn Trường Huy'},
+        {code:'16',name:'Liu Ní Khang'},{code:'17',name:'Nguyễn Minh Thiên Kim'},{code:'18',name:'Đặng Lê Hoàng Lâm'},
+        {code:'19',name:'Cổ Hồ Phương Linh'},{code:'20',name:'Quy Khánh Linh'},{code:'21',name:'Đỗ Phú Lộc'},
+        {code:'22',name:'Nguyễn Huỳnh Xuân Mai'},{code:'23',name:'Đỗ Quang Minh'},{code:'24',name:'Nguyễn Thanh Ánh Minh'},
+        {code:'25',name:'Nguyễn Thị Bình Minh'},{code:'26',name:'Ngô Hàm Nghi'},{code:'27',name:'Nguyễn Thị Minh Ngọc'},
+        {code:'28',name:'Lưu Ngọc Nhi'},{code:'29',name:'Chu Anh Quốc'},{code:'30',name:'Đỗ Tú Quyên'},
+        {code:'31',name:'Nguyễn Lê Bảo Quyên'},{code:'32',name:'Đoàn Lê Minh Sang'},{code:'33',name:'Huỳnh Ngô Trường Sơn'},
+        {code:'34',name:'Nguyễn Anh Thư'},{code:'35',name:'Lê An Thy'},{code:'36',name:'Nguyễn Phạm Thùy Tiên'},
+        {code:'37',name:'Bùi Thị Hương Trà'},{code:'38',name:'Lê Ngọc Hương Trà'},{code:'39',name:'Nguyễn Thiên Trang'},
+        {code:'40',name:'Trần Nguyễn Thuỳ Trang'},{code:'41',name:'Ngô Thanh Tùng'},{code:'42',name:'Huỳnh Thị Ngọc Tuyết'},
+        {code:'43',name:'Nguyễn Thị Ngọc Tỷ'},{code:'44',name:'Trương Thanh Ngọc Thuỳ Vân'},{code:'45',name:'Nguyễn Vũ Phúc Vinh'},
+        {code:'46',name:'Đỗ Hoàng Lê Vy'},{code:'47',name:'Thái Hải Yến'}
+      ]
+    };
+
+    function updateStudentSelect() {
+      const cls = document.getElementById('select-class').value;
+      const list = ROSTER[cls] || [];
+      const codeSelect = document.getElementById('select-code');
+      codeSelect.innerHTML = '<option value="">-- Hoặc chọn nhanh từ danh sách --</option>';
+      list.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.code;
+        opt.textContent = `STT ${item.code} — ${item.name}`;
+        codeSelect.appendChild(opt);
+      });
+      syncFromNumberInput();
+    }
+
+    function syncFromNumberInput() {
+      const cls = document.getElementById('select-class').value;
+      const list = ROSTER[cls] || [];
+      const numInput = document.getElementById('input-code-num');
+      const rawVal = numInput ? numInput.value.trim() : '';
+      const statusSpan = document.getElementById('name-status');
+      if (!rawVal) {
+        document.getElementById('input-name').value = '';
+        document.getElementById('select-code').value = '';
+        if (statusSpan) statusSpan.textContent = '';
+        return;
+      }
+      const numVal = parseInt(rawVal, 10);
+      const match = list.find(s => parseInt(s.code, 10) === numVal);
+      if (match) {
+        document.getElementById('input-name').value = match.name;
+        document.getElementById('select-code').value = match.code;
+        if (statusSpan) {
+          statusSpan.textContent = `✓ Khớp danh sách: ${match.name} (STT ${match.code} - Lớp ${cls})`;
+          statusSpan.style.color = '#16a34a';
+        }
+      } else {
+        document.getElementById('input-name').value = '';
+        document.getElementById('select-code').value = '';
+        if (statusSpan) {
+          statusSpan.textContent = `Lớp ${cls} có STT từ 1 đến ${list.length}. Chưa tìm thấy số ${rawVal}`;
+          statusSpan.style.color = '#dc2626';
+        }
+      }
+    }
+
+    document.getElementById('input-code-num').oninput = syncFromNumberInput;
+    document.getElementById('select-class').onchange = updateStudentSelect;
+    document.getElementById('select-code').onchange = () => {
+      const cls = document.getElementById('select-class').value;
+      const code = document.getElementById('select-code').value;
+      const list = ROSTER[cls] || [];
+      const match = list.find(s => s.code === code);
+      if (match) {
+        document.getElementById('input-code-num').value = match.code;
+        document.getElementById('input-name').value = match.name;
+        const statusSpan = document.getElementById('name-status');
+        if (statusSpan) {
+          statusSpan.textContent = `✓ Khớp danh sách: ${match.name} (STT ${match.code} - Lớp ${cls})`;
+          statusSpan.style.color = '#16a34a';
+        }
+      }
+    };
+    updateStudentSelect();
+
+    // =========================================================================
+    // 7. STUDENT LOGIN & SESSION PERSISTENCE (NHỚ ĐĂNG NHẬP THÍ SINH)
+    // =========================================================================
+    function showLoginView() {
+      if (viewExam) viewExam.classList.add('hidden');
+      if (viewResult) viewResult.classList.add('hidden');
+      if (viewLobby) viewLobby.classList.add('hidden');
+      if (viewLogin) viewLogin.classList.remove('hidden');
+      if (mobileBar) mobileBar.style.display = 'none';
+      if (simDock) simDock.classList.add('hidden');
+      const badge = document.getElementById('student-badge');
+      if (badge) badge.classList.add('hidden');
+      updateStudentSelect();
+    }
+
+    function showLobbyView(activeStudent) {
+      if (activeStudent) {
+        student = activeStudent;
+      }
+
+      // Update Lobby candidate card & Header badge
+      const nameEl = document.getElementById('lobby-student-name');
+      const metaEl = document.getElementById('lobby-student-meta');
+      const badgeEl = document.getElementById('badge-name');
+      const badgeContainer = document.getElementById('student-badge');
+
+      if (nameEl) nameEl.textContent = student.name;
+      if (metaEl) metaEl.textContent = `(Lớp ${student.class} • STT #${student.code})`;
+      if (badgeEl) badgeEl.textContent = `${student.name} (${student.class} - #${student.code})`;
+      if (badgeContainer) badgeContainer.classList.remove('hidden');
+
+      if (viewExam) viewExam.classList.add('hidden');
+      if (viewResult) viewResult.classList.add('hidden');
+      if (viewLogin) viewLogin.classList.add('hidden');
+      if (viewLobby) viewLobby.classList.remove('hidden');
+      if (mobileBar) mobileBar.style.display = 'none';
+      if (simDock) simDock.classList.add('hidden');
+      applyRoomStatusUI();
+    }
+
+    function handleStudentLogin() {
+      const cls = document.getElementById('select-class').value;
+      const code = (document.getElementById('input-code-num').value.trim()) || document.getElementById('select-code').value;
+      const name = document.getElementById('input-name').value.trim();
+
+      if (!name || !code) {
+        alert('Vui lòng nhập đúng Mã số / STT của bạn (VD: 15) để xác nhận họ tên trước khi vào phòng thi!');
+        return;
+      }
+
+      const loginTimeStr = new Date().toLocaleString('vi-VN');
+      const currentStudent = { name, code, class: cls, loginTime: loginTimeStr };
+      student = currentStudent;
+
+      // Persist login to localStorage if remember is checked (default checked)
+      const rememberCheck = document.getElementById('check-remember-student');
+      if (!rememberCheck || rememberCheck.checked) {
+        try {
+          localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(currentStudent));
+        } catch (e) {}
+      }
+
+      // Auto notify Google Sheets LOGIN event
+      try {
+        fetch(getAppsScriptWebhookUrl(), {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'LOGIN',
+            sheetId: '1vy8REFua2caqCRXtxYrvHQIw1mA83vkS03evT3T4Wus',
+            fullName: name,
+            studentCode: code,
+            className: cls,
+            testType: 'Đăng nhập vào sảnh thi',
+            loginTime: loginTimeStr
+          })
+        }).catch(() => {});
+      } catch (e) {}
+
+      showLobbyView(currentStudent);
+    }
+
+    function handleSwitchStudent() {
+      showLoginView();
+      setTimeout(() => {
+        const numInput = document.getElementById('input-code-num');
+        if (numInput) {
+          numInput.focus();
+          numInput.select();
+        }
+      }, 100);
+    }
+
+    function handleClearRemembered() {
+      try {
+        localStorage.removeItem(STUDENT_STORAGE_KEY);
+      } catch (e) {}
+      student = { name: '', code: '', class: document.getElementById('select-class').value };
+      document.getElementById('input-code-num').value = '';
+      document.getElementById('input-name').value = '';
+      const statusSpan = document.getElementById('name-status');
+      if (statusSpan) statusSpan.textContent = '';
+      const remAlert = document.getElementById('remembered-account-alert');
+      if (remAlert) remAlert.classList.add('hidden');
+      const btnLogin = document.getElementById('btn-student-login');
+      if (btnLogin) btnLogin.innerHTML = '🚀 Xác Nhận Đăng Nhập & Vào Phòng Thi';
+      const numInput = document.getElementById('input-code-num');
+      if (numInput) numInput.focus();
+    }
+
+    function initStudentSession() {
+      // 1. QUY TẮC CỐT LÕI: Khi mở web lần đầu hoặc tải lại trang, LUÔN BẮT ĐẦU TẠI TRANG ĐĂNG NHẬP CỦA HỌC SINH!
+      showLoginView();
+
+      const remAlert = document.getElementById('remembered-account-alert');
+      const remDesc = document.getElementById('remembered-account-desc');
+      const btnLogin = document.getElementById('btn-student-login');
+
+      // 2. Nếu học sinh đã đăng nhập 1 lần trước đó: NHỚ NỘI DUNG ĐĂNG NHẬP (điền sẵn lớp, số báo danh, họ và tên)
+      try {
+        const saved = localStorage.getItem(STUDENT_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.name && parsed.code && parsed.class) {
+            const list = ROSTER[parsed.class] || [];
+            const match = list.find(s => s.code === String(parsed.code) || parseInt(s.code, 10) === parseInt(parsed.code, 10));
+            if (match) {
+              student = { name: match.name, code: match.code, class: parsed.class };
+              // Điền sẵn nội dung đăng nhập vào form
+              document.getElementById('select-class').value = parsed.class;
+              updateStudentSelect();
+              document.getElementById('input-code-num').value = match.code;
+              syncFromNumberInput();
+
+              // Hiển thị thông báo đã nhớ nội dung đăng nhập
+              if (remAlert && remDesc) {
+                remDesc.innerHTML = `Thí sinh: <strong>${match.name}</strong> • Lớp <strong>${parsed.class}</strong> • STT <strong>#${match.code}</strong>`;
+                remAlert.classList.remove('hidden');
+              }
+              if (btnLogin) {
+                btnLogin.innerHTML = `🚀 Tiếp Tục Vào Phòng Thi (${match.name} - #${match.code})`;
+              }
+              return;
+            }
+          }
+        }
+      } catch (e) {}
+
+      // Nếu là lần đầu tiên chưa đăng nhập: để trống form
+      if (remAlert) remAlert.classList.add('hidden');
+      document.getElementById('input-code-num').value = '';
+      document.getElementById('input-name').value = '';
+      const statusSpan = document.getElementById('name-status');
+      if (statusSpan) statusSpan.textContent = '';
+      if (btnLogin) {
+        btnLogin.innerHTML = '🚀 Xác Nhận Đăng Nhập & Vào Phòng Thi';
+      }
+    }
+
+    // Wiring student login actions
+    const btnStudentLogin = document.getElementById('btn-student-login');
+    if (btnStudentLogin) btnStudentLogin.onclick = handleStudentLogin;
+
+    const btnClearRem = document.getElementById('btn-clear-remembered');
+    if (btnClearRem) btnClearRem.onclick = handleClearRemembered;
+
+    const btnSwitchLobby = document.getElementById('btn-switch-student-lobby');
+    if (btnSwitchLobby) btnSwitchLobby.onclick = handleSwitchStudent;
+
+    const btnLogoutStudent = document.getElementById('btn-logout-student');
+    if (btnLogoutStudent) btnLogoutStudent.onclick = handleSwitchStudent;
+
+    const inputCodeNum = document.getElementById('input-code-num');
+    if (inputCodeNum) {
+      inputCodeNum.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          handleStudentLogin();
+        }
+      });
+    }
+
+
+    // =========================================================================
+    // 8. START EXAMS LOGIC
+    // =========================================================================
+    function startExamFlow(examObj) {
+      if (!student || !student.name || !student.code) {
+        alert('Chưa có thông tin thí sinh. Vui lòng đăng nhập!');
+        showLoginView();
+        return;
+      }
+
+      if (!examObj || !examObj.questions || examObj.questions.length === 0) {
+        alert('Hiện chưa có bộ đề thi nào trên hệ thống.');
+        return;
+      }
+
+      CURRENT_EXAM = examObj;
+      QUESTIONS = CURRENT_EXAM.questions;
+
+      document.getElementById('badge-name').textContent = `${student.name} (${student.class} - #${student.code})`;
+      document.getElementById('student-badge').classList.remove('hidden');
+
+      // Update exam badge
+      document.getElementById('exam-badge-type').textContent = CURRENT_EXAM.title || 'ĐỀ THI ĐANG LÀM';
+
+      if (!student.loginTime) {
+        student.loginTime = new Date().toLocaleString('vi-VN');
+      }
+
+      // Auto notify Google Sheets START EXAM event
+      try {
+        fetch(getAppsScriptWebhookUrl(), {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'LOGIN',
+            sheetId: '1vy8REFua2caqCRXtxYrvHQIw1mA83vkS03evT3T4Wus',
+            fullName: student.name,
+            studentCode: student.code,
+            className: student.class,
+            testType: CURRENT_EXAM.subject,
+            loginTime: student.loginTime
+          })
+        }).catch(() => {});
+      } catch (e) {}
+
+      // Watermark
+      const wm = document.getElementById('watermark-layer');
+      wm.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const item = document.createElement('div');
+        item.textContent = `${student.class} • #${student.code} • ${student.name}`;
+        wm.appendChild(item);
+      }
+
+      currentIdx = 0;
+      userAnswers = {};
+      strikes = [];
+      remaining = CURRENT_EXAM.durationSec;
+      isActive = true;
+      isConfirmingSubmit = false;
+      submitConfirmModal.classList.add('hidden');
+
+      viewLobby.classList.add('hidden');
+      viewResult.classList.add('hidden');
+      viewExam.classList.remove('hidden');
+      mobileBar.style.display = 'flex';
+      simDock.classList.remove('hidden');
+      document.getElementById('desktop-nav').style.display = 'flex';
+
+      updateStrikesUI();
+      renderSlider();
+      renderQuestion();
+      startTimer();
+    }
+
+    const btnStartBai7 = document.getElementById('btn-start-exam-bai7');
+    if (btnStartBai7) {
+      btnStartBai7.onclick = () => {
+        startExamFlow(buildBai7Exam10());
+      };
+    }
+
+
+    // =========================================================================
+    // 8. ANTI-CHEAT DETECTION & PROCTORING
+    // =========================================================================
+    function onViolation(reason) {
+      if (!isActive || isConfirmingSubmit) return;
+      const now = Date.now();
+      if (now - lastViolation < 1200) return; // cooldown
+      lastViolation = now;
+
+      blurShield.classList.remove('hidden');
+
+      const strikeNum = strikes.length + 1;
+      const timeStr = new Date().toLocaleTimeString('vi-VN');
+
+      // Forfeit current question
+      if (!userAnswers[currentIdx]) {
+        userAnswers[currentIdx] = { choice: null, tf: {}, forfeited: true, scoreEarned: 0 };
+      } else {
+        userAnswers[currentIdx].forfeited = true;
+        userAnswers[currentIdx].scoreEarned = 0;
+      }
+
+      strikes.push({
+        num: strikeNum,
+        time: timeStr,
+        qIdx: currentIdx,
+        reason: reason
+      });
+
+      updateStrikesUI();
+      renderSlider();
+      renderQuestion();
+
+      document.getElementById('modal-title').textContent = strikeNum >= 3 ? '🚨 ĐÌNH CHỈ THI - HỦY BÀI (0 ĐIỂM)' : `🚨 CẢNH BÁO VI PHẠM LẦN ${strikeNum}/3!`;
+      document.getElementById('modal-desc').textContent = `${reason}. Vi phạm ghi nhận lúc ${timeStr}.`;
+      document.getElementById('modal-penalty').textContent = strikeNum >= 3 
+        ? 'Bạn đã vi phạm thoát màn hình 3 lần. Toàn bộ bài thi bị hủy điểm và tính 0.0 điểm!'
+        : `Câu hỏi số ${currentIdx + 1} đã bị đánh dấu SAI (0 điểm) và không được tính điểm.`;
+      
+      alertModal.classList.remove('hidden');
+    }
+
+    function updateStrikesUI() {
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`strike-${i}`);
+        if (i <= strikes.length) {
+          el.className = (i === 3) ? 'strike-badge active final' : 'strike-badge active';
+        } else {
+          el.className = 'strike-badge';
+        }
+      }
+    }
+
+    document.getElementById('btn-modal-ack').onclick = () => {
+      alertModal.classList.add('hidden');
+      blurShield.classList.add('hidden');
+      if (strikes.length >= 3) {
+        submitExam(true);
+      }
+    };
+    document.getElementById('btn-unblur').onclick = () => {
+      blurShield.classList.add('hidden');
+    };
+
+    // Listeners
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isActive) {
+        onViolation('Thí sinh chuyển sang tab hoặc ứng dụng khác');
+      }
+    });
+
+    window.addEventListener('blur', () => {
+      if (isActive) {
+        onViolation('Giao diện thi mất tiêu điểm (chuyển app hoặc chụp màn hình)');
+      }
+    });
+
+    // Screenshots
+    document.addEventListener('keydown', (e) => {
+      if (!isActive) return;
+      if (e.key === 'PrintScreen' || e.code === 'PrintScreen' || e.keyCode === 44) {
+        e.preventDefault();
+        try { navigator.clipboard?.writeText('CẢNH BÁO: Nghiêm cấm chụp màn hình!'); } catch (err) {}
+        onViolation('Phát hiện bấm phím PrintScreen');
+        return;
+      }
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        try { navigator.clipboard?.writeText('CẢNH BÁO: Nghiêm cấm chụp màn hình!'); } catch (err) {}
+        onViolation('Mở phím tắt chụp màn hình Snipping Tool (Win+Shift+S)');
+        return;
+      }
+      if (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) {
+        e.preventDefault();
+        onViolation('Chụp màn hình máy tính macOS (Command+Shift+3/4)');
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        onViolation('Bấm lệnh In / Lưu đề thi ra tệp PDF');
+        return;
+      }
+    });
+
+    // Mobile gestures
+    document.addEventListener('touchstart', (e) => {
+      if (isActive && e.touches && e.touches.length >= 3) {
+        e.preventDefault();
+        onViolation('Phát hiện cử chỉ vuốt 3 ngón tay để chụp ảnh màn hình điện thoại');
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchcancel', () => {
+      if (isActive) {
+        onViolation('Phát hiện bấm phím cứng chụp màn hình điện thoại (touchcancel)');
+      }
+    });
+
+    window.addEventListener('pagehide', () => {
+      if (isActive) {
+        onViolation('Thí sinh ẩn ứng dụng hoặc chuyển đổi màn hình trên điện thoại');
+      }
+    });
+
+    // Simulation buttons
+    const btnToggleSim = document.getElementById('btn-toggle-sim');
+    const simDockBody = document.getElementById('sim-dock-body');
+    if (btnToggleSim && simDockBody) {
+      btnToggleSim.onclick = (e) => {
+        e.stopPropagation();
+        const isCollapsed = simDockBody.style.display === 'none';
+        if (isCollapsed) {
+          simDockBody.style.display = 'flex';
+          simDock.classList.remove('sim-dock-minimized');
+          btnToggleSim.textContent = '−';
+        } else {
+          simDockBody.style.display = 'none';
+          simDock.classList.add('sim-dock-minimized');
+          btnToggleSim.textContent = '+';
+        }
+      };
+    }
+
+    document.getElementById('btn-sim-exit').onclick = () => {
+      onViolation(`Giả lập học sinh thoát app tại Câu #${currentIdx + 1}`);
+    };
+    document.getElementById('btn-sim-shot').onclick = () => {
+      onViolation(`Phát hiện thao tác chụp màn hình điện thoại tại Câu #${currentIdx + 1}`);
+    };
+
+    // =========================================================================
+    // 9. TIMER & NAVIGATION
+    // =========================================================================
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        remaining--;
+        const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+        const s = (remaining % 60).toString().padStart(2, '0');
+        document.getElementById('timer-text').textContent = `${m}:${s}`;
+
+        if (remaining <= 0) {
+          clearInterval(timer);
+          alert('Hết giờ làm bài!');
+          submitExam(false);
+        }
+      }, 1000);
+    }
+
+    function renderSlider() {
+      const track = document.getElementById('slider-track');
+      track.innerHTML = '';
+      QUESTIONS.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        let cls = 'slider-btn';
+        if (idx === currentIdx) cls += ' current';
+        const a = userAnswers[idx];
+        if (a) {
+          if (a.forfeited) cls += ' forfeited';
+          else if (a.choice !== null && a.choice !== undefined || (a.tf && Object.keys(a.tf).length > 0)) cls += ' done';
+        }
+        btn.className = cls;
+        btn.textContent = (idx + 1);
+        btn.onclick = () => {
+          currentIdx = idx;
+          renderQuestion();
+          renderSlider();
+        };
+        track.appendChild(btn);
+      });
+    }
+
+    function isQuestionDone(idx) {
+      const q = QUESTIONS[idx];
+      const a = userAnswers[idx];
+      if (!q || !a) return false;
+      if (a.forfeited) return true;
+      if (q.type === 'tf') {
+        return !!(a.tf && q.statements && q.statements.every(s => a.tf[s.key] === true || a.tf[s.key] === false));
+      }
+      return a.choice !== null && a.choice !== undefined;
+    }
+
+    function getDoneCount() {
+      let count = 0;
+      for (let i = 0; i < QUESTIONS.length; i++) {
+        if (isQuestionDone(i)) count++;
+      }
+      return count;
+    }
+
+    function findFirstUnansweredIndex() {
+      for (let i = 0; i < QUESTIONS.length; i++) {
+        if (!isQuestionDone(i)) return i;
+      }
+      return -1;
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[currentIdx];
+      const a = userAnswers[currentIdx];
+      const isForfeited = !!a?.forfeited;
+      const totalQ = QUESTIONS.length;
+      const doneCount = getDoneCount();
+      const allDone = (totalQ > 0 && doneCount === totalQ);
+      const firstUnansweredIdx = findFirstUnansweredIndex();
+
+      const progressPill = document.getElementById('exam-progress-pill');
+      const submitHint = document.getElementById('exam-submit-hint');
+      if (progressPill) {
+        progressPill.textContent = `Đã làm: ${doneCount}/${totalQ} câu`;
+        if (allDone) {
+          progressPill.style.background = '#dcfce7';
+          progressPill.style.color = '#15803d';
+          progressPill.style.borderColor = '#86efac';
+        } else {
+          progressPill.style.background = '#e0f2fe';
+          progressPill.style.color = '#0369a1';
+          progressPill.style.borderColor = '#bae6fd';
+        }
+      }
+      if (submitHint) {
+        submitHint.textContent = allDone
+          ? 'Đã hoàn thành 10/10 câu — Có thể nộp bài ngay'
+          : `Còn ${totalQ - doneCount} câu chưa làm (chỉ nộp sau khi làm đủ ${totalQ}/${totalQ} câu)`;
+        submitHint.style.color = allDone ? '#15803d' : '#64748b';
+      }
+
+      const lvlTag = document.getElementById('q-level-tag');
+      if (lvlTag) {
+        lvlTag.textContent = q.level || 'Nhận biết';
+        lvlTag.style.display = 'inline-block';
+      }
+
+      document.getElementById('q-points-tag').textContent = q.type === 'tf' ? '2.0 điểm' : '1.0 điểm';
+      document.getElementById('q-title').textContent = q.question;
+
+      const forfeitBanner = document.getElementById('forfeit-banner');
+      if (isForfeited) forfeitBanner.classList.remove('hidden');
+      else forfeitBanner.classList.add('hidden');
+
+      const ctxBox = document.getElementById('q-context-box');
+      const mcBox = document.getElementById('mc-options-container');
+      const tfBox = document.getElementById('tf-options-container');
+
+      if (q.type === 'tf') {
+        ctxBox.classList.remove('hidden');
+        ctxBox.innerHTML = `
+          <strong>${q.ctx}</strong>
+          <div style="margin-top:6px; font-size:11px; color:#0284c7; border-top:1px dashed #bae6fd; padding-top:4px;">
+            Quy tắc chấm: Đúng 1 lệnh: <strong>0,2đ</strong> • Đúng 2: <strong>0,5đ</strong> • Đúng 3: <strong>1,0đ</strong> • Đúng 4: <strong>2,0đ</strong>
+          </div>
+        `;
+        mcBox.classList.add('hidden');
+        tfBox.classList.remove('hidden');
+        renderTF(q, a);
+      } else {
+        if (q.ctxHtml) {
+          ctxBox.classList.remove('hidden');
+          ctxBox.innerHTML = q.ctxHtml;
+        } else {
+          ctxBox.classList.add('hidden');
+          ctxBox.innerHTML = '';
+        }
+        mcBox.classList.remove('hidden');
+        tfBox.classList.add('hidden');
+        renderMC(q, a);
+      }
+
+      document.getElementById('btn-prev').disabled = (currentIdx === 0);
+      document.getElementById('m-btn-prev').disabled = (currentIdx === 0);
+
+      // CHỈ HIỂN THỊ NÚT NỘP BÀI KHI ĐÃ LÀM XONG TẤT CẢ 10/10 CÂU
+      const isLastQuestion = (currentIdx === totalQ - 1);
+      const btnSubmit = document.getElementById('btn-submit-desktop');
+      const mBtnSubmit = document.getElementById('m-btn-submit');
+      const btnNext = document.getElementById('btn-next');
+      const mBtnNext = document.getElementById('m-btn-next');
+      const btnJump = document.getElementById('btn-jump-unanswered');
+      const mBtnJump = document.getElementById('m-btn-jump-unanswered');
+
+      if (allDone) {
+        btnSubmit.style.display = 'inline-flex';
+        mBtnSubmit.style.display = 'inline-flex';
+        if (btnJump) btnJump.style.display = 'none';
+        if (mBtnJump) mBtnJump.style.display = 'none';
+        btnNext.style.display = isLastQuestion ? 'none' : 'inline-flex';
+        mBtnNext.style.display = isLastQuestion ? 'none' : 'inline-flex';
+      } else {
+        btnSubmit.style.display = 'none';
+        mBtnSubmit.style.display = 'none';
+        if (isLastQuestion) {
+          btnNext.style.display = 'none';
+          mBtnNext.style.display = 'none';
+          const remainingCount = totalQ - doneCount;
+          if (btnJump) {
+            btnJump.style.display = 'inline-flex';
+            btnJump.textContent = `Còn ${remainingCount} câu chưa làm → Câu ${firstUnansweredIdx + 1}`;
+          }
+          if (mBtnJump) {
+            mBtnJump.style.display = 'inline-flex';
+            mBtnJump.textContent = `Còn ${remainingCount} câu → Câu ${firstUnansweredIdx + 1}`;
+          }
+        } else {
+          btnNext.style.display = 'inline-flex';
+          mBtnNext.style.display = 'inline-flex';
+          if (btnJump) btnJump.style.display = 'none';
+          if (mBtnJump) mBtnJump.style.display = 'none';
+        }
+      }
+    }
+
+    function renderMC(q, a) {
+      const box = document.getElementById('mc-options-container');
+      box.innerHTML = '';
+      q.options.forEach((opt, optIdx) => {
+        const letter = String.fromCharCode(65 + optIdx);
+        const isSelected = (a?.choice === optIdx);
+        const isForfeited = !!a?.forfeited;
+
+        const row = document.createElement('div');
+        let cls = 'option-item';
+        if (isSelected) cls += isForfeited ? ' forfeited selected' : ' selected';
+        row.className = cls;
+
+        row.innerHTML = `
+          <div class="opt-letter">${letter}</div>
+          <div class="opt-text" style="flex:1;">${opt}</div>
+          ${isSelected ? `<span style="color:${isForfeited ? '#e11d48' : '#0284c7'}; font-weight:800; margin-left:auto;">✓</span>` : ''}
+        `;
+
+        row.onclick = () => {
+          if (!userAnswers[currentIdx]) userAnswers[currentIdx] = { choice: optIdx, tf: {}, forfeited: false };
+          else userAnswers[currentIdx].choice = optIdx;
+          renderQuestion();
+          renderSlider();
+        };
+        box.appendChild(row);
+      });
+    }
+
+    function renderTF(q, a) {
+      const box = document.getElementById('tf-options-container');
+      box.innerHTML = '<div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:6px;">Chọn ĐÚNG hoặc SAI cho từng nhận định:</div>';
+      
+      q.statements.forEach((stmt) => {
+        const val = a?.tf?.[stmt.key];
+        const row = document.createElement('div');
+        row.className = 'tf-row';
+        row.innerHTML = `
+          <div class="tf-text">${stmt.text}</div>
+          <div class="tf-btns">
+            <button class="tf-btn ${val === true ? 'active-true' : ''}">ĐÚNG</button>
+            <button class="tf-btn ${val === false ? 'active-false' : ''}">SAI</button>
+          </div>
+        `;
+
+        const [btnT, btnF] = row.querySelectorAll('.tf-btn');
+        btnT.onclick = () => {
+          if (!userAnswers[currentIdx]) userAnswers[currentIdx] = { choice: null, tf: {}, forfeited: false };
+          userAnswers[currentIdx].tf[stmt.key] = true;
+          renderQuestion();
+          renderSlider();
+        };
+        btnF.onclick = () => {
+          if (!userAnswers[currentIdx]) userAnswers[currentIdx] = { choice: null, tf: {}, forfeited: false };
+          userAnswers[currentIdx].tf[stmt.key] = false;
+          renderQuestion();
+          renderSlider();
+        };
+
+        box.appendChild(row);
+      });
+    }
+
+    function goPrev() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        renderQuestion();
+        renderSlider();
+      }
+    }
+    function goNext() {
+      if (currentIdx < QUESTIONS.length - 1) {
+        currentIdx++;
+        renderQuestion();
+        renderSlider();
+      }
+    }
+
+    function jumpToFirstUnanswered() {
+      const idx = findFirstUnansweredIndex();
+      if (idx !== -1) {
+        currentIdx = idx;
+        renderQuestion();
+        renderSlider();
+      }
+    }
+
+    document.getElementById('btn-prev').onclick = goPrev;
+    document.getElementById('m-btn-prev').onclick = goPrev;
+    document.getElementById('btn-next').onclick = goNext;
+    document.getElementById('m-btn-next').onclick = goNext;
+    const btnJumpUnanswered = document.getElementById('btn-jump-unanswered');
+    const mBtnJumpUnanswered = document.getElementById('m-btn-jump-unanswered');
+    if (btnJumpUnanswered) btnJumpUnanswered.onclick = jumpToFirstUnanswered;
+    if (mBtnJumpUnanswered) mBtnJumpUnanswered.onclick = jumpToFirstUnanswered;
+
+    function openSubmitModal() {
+      if (!isActive) return;
+      const doneCount = getDoneCount();
+      if (doneCount < QUESTIONS.length) {
+        alert(`Bạn mới hoàn thành ${doneCount}/${QUESTIONS.length} câu. Vui lòng làm hết tất cả ${QUESTIONS.length} câu trước khi nộp bài!`);
+        jumpToFirstUnanswered();
+        return;
+      }
+      isConfirmingSubmit = true;
+      submitConfirmModal.classList.remove('hidden');
+    }
+
+    document.getElementById('btn-submit-desktop').onclick = openSubmitModal;
+    document.getElementById('m-btn-submit').onclick = openSubmitModal;
+
+    document.getElementById('btn-cancel-submit').onclick = () => {
+      submitConfirmModal.classList.add('hidden');
+      // Thêm thời gian đệm bảo vệ an toàn để không bị tính vi phạm khi quay lại làm tiếp
+      lastViolation = Date.now() + 1500;
+      setTimeout(() => {
+        isConfirmingSubmit = false;
+      }, 800);
+    };
+
+    document.getElementById('btn-confirm-submit').onclick = () => {
+      submitConfirmModal.classList.add('hidden');
+      isConfirmingSubmit = false;
+      submitExam(false);
+    };
+
+    // =========================================================================
+    // 10. SUBMIT & SCORING
+    // =========================================================================
+    function submitExam(disqualified = false) {
+      clearInterval(timer);
+      isActive = false;
+      isConfirmingSubmit = false;
+      submitConfirmModal.classList.add('hidden');
+
+      let totalScore = 0;
+      let correctCount = 0;
+      let correctNB = 0;
+      let correctTH = 0;
+      let correctVD = 0;
+      let tfSummary = '0/4 ý (0đ)';
+
+      QUESTIONS.forEach((q, idx) => {
+        const a = userAnswers[idx];
+        if (!a) return;
+
+        if (q.type === 'tf') {
+          let stmtsCorrect = 0;
+          let qScore = 0;
+          if (!a.forfeited) {
+            q.statements.forEach(s => {
+              if (a.tf && a.tf[s.key] === s.isTrue) {
+                stmtsCorrect++;
+              }
+            });
+
+            if (stmtsCorrect === 1) qScore = 0.2;
+            else if (stmtsCorrect === 2) qScore = 0.5;
+            else if (stmtsCorrect === 3) qScore = 1.0;
+            else if (stmtsCorrect === 4) qScore = 2.0;
+
+            if (stmtsCorrect === 4) correctCount++;
+            tfSummary = `Đúng ${stmtsCorrect}/4 ý (${qScore.toFixed(1)}đ)`;
+          }
+          a.scoreEarned = qScore;
+          totalScore += qScore;
+        } else {
+          let qScore = 0;
+          if (!a.forfeited && a.choice === q.correct) {
+            qScore = 1.0;
+            correctCount++;
+            if (q.level === 'Nhận biết') correctNB++;
+            else if (q.level === 'Thông hiểu') correctTH++;
+            else if (q.level === 'Vận dụng') correctVD++;
+          }
+          a.scoreEarned = qScore;
+          totalScore += qScore;
+        }
+      });
+
+      const maxScore = CURRENT_EXAM.totalPoints;
+      let finalScore = disqualified ? 0 : Number(Math.min(maxScore, Math.max(0, totalScore)).toFixed(1));
+
+      viewExam.classList.add('hidden');
+      mobileBar.style.display = 'none';
+      simDock.classList.add('hidden');
+      viewResult.classList.remove('hidden');
+
+      const examNameLabel = CURRENT_EXAM.type === 'bai7_10' ? 'Bài 7 (10 Câu Trắc Nghiệm)' : (CURRENT_EXAM.title || 'Đề Thi Trắc Nghiệm');
+      document.getElementById('result-name').textContent = student.name;
+      document.getElementById('result-meta').textContent = `SBD: ${student.code} • Lớp: ${student.class} • ${examNameLabel}`;
+      document.getElementById('result-score-box').textContent = `${finalScore.toFixed(1)}/${maxScore.toFixed(0)}`;
+      document.getElementById('res-correct').textContent = `${correctCount}/${QUESTIONS.length} câu`;
+      document.getElementById('res-violations').textContent = `${strikes.length} lần`;
+
+      const scoreBox = document.getElementById('result-score-box');
+      const tag = document.getElementById('result-status-tag');
+      const disBox = document.getElementById('disqualified-box');
+
+      if (disqualified) {
+        scoreBox.className = 'result-score-badge danger';
+        tag.textContent = 'ĐÌNH CHỈ THI (0 ĐIỂM)';
+        tag.style.background = '#ffe4e6';
+        tag.style.color = '#e11d48';
+        disBox.classList.remove('hidden');
+      } else {
+        scoreBox.className = 'result-score-badge';
+        const isPass = finalScore >= CURRENT_EXAM.passScore;
+        tag.textContent = isPass ? 'ĐẠT YÊU CẦU' : 'CHƯA ĐẠT';
+        tag.style.background = isPass ? '#dcfce7' : '#fee2e2';
+        tag.style.color = isPass ? '#15803d' : '#b91c1c';
+        disBox.classList.add('hidden');
+      }
+
+      // Review List
+      const reviewBox = document.getElementById('review-list');
+      reviewBox.innerHTML = '<h3 style="font-size:14px; font-weight:800; margin:16px 0 8px 0; color:#0f172a;">Chi Tiết Từng Câu Hỏi:</h3>';
+
+      QUESTIONS.forEach((q, idx) => {
+        const a = userAnswers[idx];
+        const isForfeited = !!a?.forfeited;
+        const ptsEarned = a?.scoreEarned || 0;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.marginBottom = '10px';
+        card.style.padding = '14px';
+
+        let statusBadge = '';
+        if (isForfeited) {
+          statusBadge = '<span style="background:#ffe4e6; color:#e11d48; padding:2px 8px; border-radius:6px; font-size:10px; font-weight:800;">🚨 Phạt 0đ (Thoát màn hình/Chụp)</span>';
+        } else if (ptsEarned > 0) {
+          statusBadge = `<span style="background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:6px; font-size:10px; font-weight:800;">✓ Đạt +${ptsEarned.toFixed(1)}đ</span>`;
+        } else {
+          statusBadge = '<span style="background:#f1f5f9; color:#64748b; padding:2px 8px; border-radius:6px; font-size:10px; font-weight:800;">0 điểm</span>';
+        }
+
+        let innerContent = '';
+        if (q.type === 'tf') {
+          let stmtsHtml = '';
+          q.statements.forEach(s => {
+            const userVal = a?.tf?.[s.key];
+            const isMatch = (userVal === s.isTrue);
+            stmtsHtml += `
+              <div style="padding:6px 8px; border-radius:8px; margin-bottom:4px; font-size:11px; background:${isMatch ? '#ecfdf5' : '#fff1f2'}; display:flex; justify-content:space-between; align-items:center;">
+                <span>${s.text}</span>
+                <span style="font-weight:700; font-family:monospace; margin-left:8px;">
+                  Chọn: ${userVal === true ? 'ĐÚNG' : userVal === false ? 'SAI' : '-'} | Đáp án: ${s.isTrue ? 'ĐÚNG' : 'SAI'}
+                </span>
+              </div>
+            `;
+          });
+          innerContent = `
+            <div style="margin:8px 0;">${stmtsHtml}</div>
+            <div style="font-size:11px; color:#0369a1; background:#f0f9ff; padding:6px 10px; border-radius:8px; margin-top:6px;">
+              ${q.exp}
+            </div>
+          `;
+        } else {
+          let optsHtml = '';
+          q.options.forEach((opt, optIdx) => {
+            const letter = String.fromCharCode(65 + optIdx);
+            const isChosen = (a?.choice === optIdx);
+            const isKey = (optIdx === q.correct);
+            let optStyle = 'padding:6px 10px; border-radius:8px; margin-bottom:4px; font-size:12px; border:1px solid #e2e8f0;';
+            if (isKey) optStyle += 'background:#ecfdf5; border-color:#86efac; color:#166534; font-weight:700;';
+            else if (isChosen) optStyle += 'background:#fff1f2; border-color:#fca5a5; color:#991b1b;';
+            else optStyle += 'background:#ffffff; color:#475569;';
+
+            optsHtml += `
+              <div style="${optStyle}">
+                <strong>${letter}.</strong> ${opt} ${isChosen ? '(Thí sinh chọn)' : ''} ${isKey ? '(Đáp án chuẩn)' : ''}
+              </div>
+            `;
+          });
+          innerContent = `
+            <div style="margin:8px 0;">${optsHtml}</div>
+            <div style="font-size:11px; color:#0369a1; background:#f0f9ff; padding:6px 10px; border-radius:8px; margin-top:6px;">
+              💡 <strong>Giải thích:</strong> ${q.exp}
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="font-size:12px; color:#0f172a;">Câu ${idx + 1} (${q.type === 'tf' ? '2.0đ' : '1.0đ'}) [${q.level}]</strong>
+            ${statusBadge}
+          </div>
+          <div style="font-size:13px; color:#1e293b; font-weight:600; margin-bottom:6px;">
+            ${q.question}
+          </div>
+          ${q.ctxHtml ? `<div class="context-box" style="margin-bottom:8px;">${q.ctxHtml}</div>` : ''}
+          ${innerContent}
+        `;
+        reviewBox.appendChild(card);
+      });
+
+      // Prepare Copy Row for Google Sheets (14 columns)
+      const nowStr = new Date().toLocaleString('vi-VN');
+      const loginTimeForSheet = student.loginTime || nowStr;
+      const timeSpentFormatted = remaining <= 0 ? 'Hết giờ' : `${CURRENT_EXAM.durationSec - remaining} giây`;
+      const examCode = (CURRENT_EXAM.type === 'bai7_10' ? 'B7-' : 'CN-') + Math.floor(100 + Math.random() * 899);
+      const tfDisplayText = CURRENT_EXAM.questions.some(q => q.type === 'tf') ? tfSummary : 'Không có phần Đ/S';
+
+      let attemptNum = 1;
+      try {
+        const attKey = `edusecure_attempt_${student.class}_${student.code}`;
+        const prevAtt = parseInt(localStorage.getItem(attKey) || '0', 10);
+        attemptNum = (isNaN(prevAtt) ? 0 : prevAtt) + 1;
+        localStorage.setItem(attKey, String(attemptNum));
+      } catch (e) {}
+      const attemptLabelText = attemptNum === 1 ? 'Lần 1: Chính thức' : `Lần ${attemptNum}`;
+
+      const sheetRow = [
+        nowStr,
+        student.code,
+        student.name,
+        student.class,
+        CURRENT_EXAM.subject,
+        examCode,
+        attemptLabelText,
+        strikes.length,
+        timeSpentFormatted,
+        finalScore.toFixed(2),
+        correctNB,
+        correctTH,
+        correctVD,
+        tfDisplayText
+      ].join('\t');
+
+      const copyBtn = document.getElementById('btn-copy-sheet-row');
+      if (copyBtn) {
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(sheetRow).then(() => {
+            alert('Đã sao chép 14 cột chuẩn! Bạn có thể dán (Ctrl+V) vào Google Sheets.');
+          }).catch(() => {
+            prompt('Dòng dữ liệu của bạn (hãy nhấn Ctrl+C để copy):', sheetRow);
+          });
+        };
+      }
+
+      const syncStatusEl = document.getElementById('sheet-sync-status');
+      const statusText = disqualified
+        ? 'Đình chỉ (0đ)'
+        : (finalScore >= CURRENT_EXAM.passScore ? 'Đạt yêu cầu' : 'Chưa đạt');
+
+      if (syncStatusEl) {
+        syncStatusEl.style.color = '#064e3b';
+        syncStatusEl.innerHTML = `Đang ghi điểm của <strong>${student.name}</strong> (Lớp <strong>${student.class}</strong> • Mã HS <strong>#${student.code}</strong>) vào sheet <strong>BAI TEST THU</strong>...`;
+      }
+
+      // Auto Push to Google Sheets via Webhook -> Sheet "BAI TEST THU" (Cột D trở đi)
+      try {
+        fetch(getAppsScriptWebhookUrl(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'SUBMISSION',
+            sheetId: '1vy8REFua2caqCRXtxYrvHQIw1mA83vkS03evT3T4Wus',
+            targetSheetName: 'BAI TEST THU',
+            fullName: student.name,
+            studentCode: student.code,
+            className: student.class,
+            loginTime: loginTimeForSheet,
+            finishTime: nowStr,
+            testName: CURRENT_EXAM.subject,
+            examCode: examCode,
+            attemptNumber: attemptNum,
+            attemptLabel: attemptLabelText,
+            violationsCount: strikes.length,
+            timeSpentFormatted: timeSpentFormatted,
+            score: Number(finalScore.toFixed(2)),
+            correctCount: correctCount,
+            totalQuestions: QUESTIONS.length,
+            correctNhanBiet: correctNB,
+            correctThongHieu: correctTH,
+            correctVanDung: correctVD,
+            tfResultText: tfDisplayText,
+            statusText: statusText
+          })
+        }).then(async (res) => {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const text = await res.text();
+          let data = null;
+          try { data = JSON.parse(text); } catch (err) {}
+          if (data && data.status === 'success') {
+            if (syncStatusEl) {
+              syncStatusEl.style.color = '#065f46';
+              syncStatusEl.innerHTML = `✓ Đã ghi điểm <strong>${data.attemptColTitle || attemptLabelText}</strong> của <strong>${student.name}</strong> (Lớp <strong>${student.class}</strong> • Mã #${student.code}) vào sheet <strong>${data.sheetName || 'BAI TEST THU'}</strong> (dòng ${data.matchedRow || ''}, cột ${data.scoreColLetter || 'E'}).`;
+            }
+          } else {
+            throw new Error((data && data.message) ? data.message : 'Apps Script không trả về JSON hợp lệ');
+          }
+        }).catch((err) => {
+          if (syncStatusEl) {
+            syncStatusEl.style.color = '#b91c1c';
+            syncStatusEl.innerHTML = `⚠️ Chưa ghi tự động được vào Google Sheet (${err && err.message ? err.message : 'bị chặn quyền truy cập / lỗi mạng'}). Giáo viên kiểm tra mục <strong>Người có quyền truy cập = Bất kỳ ai</strong> trên Web App Apps Script, hoặc bấm nút <strong>Sao Chép Dòng Điểm</strong> bên dưới.`;
+          }
+        });
+      } catch (e) {}
+    }
+
+    // Retake Exam Button
+    document.getElementById('btn-retake').onclick = () => {
+      startExamFlow(buildBai7Exam10());
+    };
+
+    // Back to Lobby Button
+    document.getElementById('btn-back-lobby').onclick = () => {
+      showLobbyView();
+    };
+
+    // =========================================================================
+    // 11. CỔNG TÀI NGUYÊN & QUẢN TRỊ GIÁO VIÊN (MAI HẰNG)
+    // =========================================================================
+    let isGvAuthenticated = false;
+    const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJ6AlHMDJleJaSio6BADmaX7VkqrhyJb4VkdqDltHN1wVOQ3pbkUtgeD_jqvNQHr0z/exec';
+    const LEGACY_APPS_SCRIPT_URLS = [
+      'https://script.google.com/macros/s/AKfycbwqvh3UB8Th7DOuEpFXzlN7VY8XAYtkqm0zMqENGTqktCVqtqgT-CEanj1_nWf1pSaocA/exec',
+      'https://script.google.com/macros/s/AKfycbxfm6XL3u7ug63UclBrvpavM0bSM95RlznhmDGTdpqgiUkhD8iXcnAOs1gcJmBCmiDn/exec',
+      'https://script.google.com/macros/s/AKfycbwnyKAn0OKZrf9NohIhFTfTFDJhGUpQB0jkUf98a8MgzH9AZpgBzWpzR1EDwFGIXlQx/exec'
+    ];
+    const WEBHOOK_STORAGE_KEY = 'edusecure_apps_script_url';
+
+    function getAppsScriptWebhookUrl() {
+      try {
+        const saved = localStorage.getItem(WEBHOOK_STORAGE_KEY);
+        if (saved && !LEGACY_APPS_SCRIPT_URLS.includes(saved.trim()) && saved.trim().startsWith('https://script.google.com/')) {
+          return saved.trim();
+        }
+      } catch (e) {}
+      return DEFAULT_APPS_SCRIPT_URL;
+    }
+
+    const gvPortalModal = document.getElementById('gv-portal-modal');
+    const gvAuthBox = document.getElementById('gv-auth-box');
+    const gvPanelContent = document.getElementById('gv-panel-content');
+    const btnOpenGv = document.getElementById('btn-open-gv-portal');
+    const btnCloseGv = document.getElementById('btn-close-gv-portal');
+    const btnGvLogin = document.getElementById('btn-gv-login');
+    const btnGvLogout = document.getElementById('btn-gv-logout');
+    const gvUserInp = document.getElementById('gv-username-input');
+    const gvPassInp = document.getElementById('gv-password-input');
+    const gvLoginErr = document.getElementById('gv-login-error');
+
+    // Google Apps Script source code
+    const APPS_SCRIPT_SOURCE = `/**
+ * =========================================================================
+ * EDUSECURE - HỆ THỐNG THI TRẮC NGHIỆM CÔNG NGHỆ 10
+ * TÌM ĐÚNG SHEET "BAI TEST THU" -> TÊN HS, LỚP, MÃ HS (CỘT A-C)
+ * GHI TIẾP TỪ CỘT D TRỞ ĐI: THỜI GIAN ĐĂNG NHẬP, ĐIỂM LẦN 1, LẦN 2, LẦN 3...
+ * Tác giả: GV Mai Hằng
+ * =========================================================================
+ */
+
+function normText_(val) {
+  return String(val === null || val === undefined ? "" : val)
+    .normalize("NFC")
+    .trim()
+    .replace(/\\s+/g, " ")
+    .toLowerCase();
+}
+
+function normClass_(val) {
+  return normText_(val).replace(/^(\\d+[a-z])0+(\\d+)$/i, "$1$2");
+}
+
+function normCode_(val) {
+  var s = normText_(val);
+  if (/^0*\\d+$/.test(s)) return String(parseInt(s, 10));
+  return s;
+}
+
+function stripAccents_(str) {
+  return String(str || "")
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+}
+
+function colToLetter_(col) {
+  var letter = "";
+  while (col > 0) {
+    var temp = (col - 1) % 26;
+    letter = String.fromCharCode(temp + 65) + letter;
+    col = (col - temp - 1) / 26;
+  }
+  return letter;
+}
+
+function findSheetByNameSmart_(ss, targetName) {
+  var exact = ss.getSheetByName(targetName);
+  if (exact) return exact;
+
+  var targetNorm = normText_(targetName);
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    if (normText_(sheets[i].getName()) === targetNorm) {
+      return sheets[i];
+    }
+  }
+
+  var targetAscii = stripAccents_(targetNorm);
+  for (var j = 0; j < sheets.length; j++) {
+    if (stripAccents_(normText_(sheets[j].getName())) === targetAscii) {
+      return sheets[j];
+    }
+  }
+  return null;
+}
+
+function detectIdentityColumns_(sheet, headerRow) {
+  var maxScanCol = Math.max(sheet.getLastColumn(), 3);
+  var headers = sheet.getRange(headerRow, 1, 1, maxScanCol).getValues()[0];
+  var cols = { stt: 0, name: 0, cls: 0 };
+
+  for (var c = 0; c < headers.length; c++) {
+    var ha = stripAccents_(normText_(headers[c]));
+    var colIdx = c + 1;
+    if (!ha) continue;
+    if (!cols.stt && (ha === "stt" || ha === "sbd" || ha.indexOf("ma hoc sinh") !== -1 || ha.indexOf("ma hs") !== -1 || ha.indexOf("ma so") !== -1 || ha.indexOf("stt") !== -1)) {
+      cols.stt = colIdx;
+    } else if (!cols.name && (ha.indexOf("ho va ten") !== -1 || ha.indexOf("ho ten") !== -1 || ha.indexOf("ten hoc sinh") !== -1 || ha.indexOf("ten hs") !== -1 || ha === "ho & ten" || ha === "ten")) {
+      cols.name = colIdx;
+    } else if (!cols.cls && (ha === "lop" || ha.indexOf("lop hoc") !== -1 || ha.indexOf("ten lop") !== -1)) {
+      cols.cls = colIdx;
+    }
+  }
+
+  // Fallback nhận diện trong 3 cột A, B, C theo nội dung dữ liệu nếu tiêu đề khác chuẩn
+  if ((!cols.stt || !cols.name || !cols.cls) && sheet.getLastRow() > headerRow) {
+    var sampleRows = sheet.getRange(headerRow + 1, 1, Math.min(sheet.getLastRow() - headerRow, 10), 3).getValues();
+    for (var col = 1; col <= 3; col++) {
+      if (col === cols.stt || col === cols.name || col === cols.cls) continue;
+      var clsHits = 0;
+      var numHits = 0;
+      var textHits = 0;
+      for (var r = 0; r < sampleRows.length; r++) {
+        var v = String(sampleRows[r][col - 1] || "").trim();
+        if (!v) continue;
+        if (/^10[a-zA-Z]\\d+$/i.test(v)) clsHits++;
+        else if (/^\\d{1,3}$/.test(v)) numHits++;
+        else textHits++;
+      }
+      if (!cols.cls && clsHits > 0) cols.cls = col;
+      else if (!cols.stt && numHits > 0) cols.stt = col;
+      else if (!cols.name && textHits > 0) cols.name = col;
+    }
+  }
+
+  // Mặc định chuẩn A=Mã/STT, B=Tên HS, C=Lớp nếu vẫn chưa xác định
+  if (!cols.stt) cols.stt = 1;
+  if (!cols.name) cols.name = 2;
+  if (!cols.cls) cols.cls = 3;
+  return cols;
+}
+
+function findHeaderRow_(sheet) {
+  var lastRow = sheet.getLastRow();
+  var lastCol = Math.max(sheet.getLastColumn(), 3);
+  if (lastRow < 1) return 1;
+  var scan = Math.min(lastRow, 10);
+  var rows = sheet.getRange(1, 1, scan, lastCol).getValues();
+  for (var r = 0; r < rows.length; r++) {
+    var rowJoined = stripAccents_(rows[r].map(normText_).join(" | "));
+    if ((rowJoined.indexOf("ten") !== -1 || rowJoined.indexOf("ho va ten") !== -1) &&
+        (rowJoined.indexOf("lop") !== -1 || rowJoined.indexOf("ma") !== -1 || rowJoined.indexOf("stt") !== -1)) {
+      return r + 1;
+    }
+  }
+  return 1;
+}
+
+function doGet() {
+  return ContentService.createTextOutput(JSON.stringify({
+    status: "ok",
+    message: "EduSecure Apps Script sẵn sàng ghi vào sheet BAI TEST THU"
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    var rawData = e.postData.contents;
+    var data = JSON.parse(rawData);
+    var sheetId = data.sheetId || "1vy8REFua2caqCRXtxYrvHQIw1mA83vkS03evT3T4Wus";
+    var ss = SpreadsheetApp.openById(sheetId);
+
+    // 1. GHI DANH SÁCH HỌC SINH ĐĂNG NHẬP
+    if (data.action === "LOGIN") {
+      var logSheet = findSheetByNameSmart_(ss, "DANH SACH HS");
+      if (!logSheet) {
+        logSheet = ss.insertSheet("DANH SACH HS");
+        logSheet.appendRow(["Thời Gian Đăng Nhập", "Mã / STT", "Họ Và Tên", "Lớp Học", "Loại Đề Thi"]);
+        logSheet.getRange(1, 1, 1, 5).setFontWeight("bold").setBackground("#e0f2fe");
+      }
+      logSheet.appendRow([
+        data.loginTime || new Date().toLocaleString("vi-VN"),
+        data.studentCode || "",
+        data.fullName || "",
+        data.className || "",
+        data.testType || ""
+      ]);
+      return ContentService.createTextOutput(JSON.stringify({ status: "success", action: "LOGIN" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. KHI THI XONG: VÀO ĐÚNG SHEET "BAI TEST THU", TÌM ĐÚNG TÊN HS, LỚP, MÃ HS
+    //    VÀ GHI TIẾP TỪ CỘT D TRỞ ĐI: THỜI GIAN ĐĂNG NHẬP, MÃ ĐỀ THI, LOẠI ĐỀ THI,
+    //    THỜI GIAN LÀM BÀI, ĐIỂM THI LẦN 1, ĐIỂM THI LẦN 2, LẦN 3...
+    if (data.action === "SUBMISSION") {
+      var targetSheetName = data.targetSheetName || "BAI TEST THU";
+      var sheet = findSheetByNameSmart_(ss, targetSheetName);
+
+      if (!sheet) {
+        sheet = ss.insertSheet(targetSheetName);
+        sheet.appendRow([
+          "Mã học sinh",
+          "Tên học sinh",
+          "Lớp",
+          "Thời gian đăng nhập",
+          "Mã đề thi",
+          "Loại đề thi",
+          "Thời gian làm bài",
+          "Điểm thi lần 1",
+          "Điểm thi lần 2",
+          "Điểm thi lần 3"
+        ]);
+        sheet.getRange(1, 1, 1, 10).setFontWeight("bold").setBackground("#dcfce7");
+      }
+
+      var headerRow = findHeaderRow_(sheet);
+      var idCols = detectIdentityColumns_(sheet, headerRow);
+
+      // Tìm đúng dòng học sinh theo Tên HS + Lớp + Mã học sinh
+      var targetName = normText_(data.fullName);
+      var targetClass = normClass_(data.className);
+      var targetCode = normCode_(data.studentCode);
+
+      var matchedRow = -1;
+      var lastRow = sheet.getLastRow();
+      var scanWidth = Math.max(sheet.getLastColumn(), idCols.stt, idCols.name, idCols.cls, 7);
+
+      if (lastRow > headerRow) {
+        var allRows = sheet.getRange(headerRow + 1, 1, lastRow - headerRow, scanWidth).getValues();
+
+        // Ưu tiên 1: Khớp cả 3 (Tên HS + Lớp + Mã HS)
+        for (var i = 0; i < allRows.length; i++) {
+          var r = allRows[i];
+          if (normText_(r[idCols.name - 1]) === targetName &&
+              normClass_(r[idCols.cls - 1]) === targetClass &&
+              normCode_(r[idCols.stt - 1]) === targetCode) {
+            matchedRow = headerRow + 1 + i;
+            break;
+          }
+        }
+
+        // Ưu tiên 2: Khớp Tên HS + Lớp
+        if (matchedRow === -1) {
+          for (var j = 0; j < allRows.length; j++) {
+            var r2 = allRows[j];
+            if (normText_(r2[idCols.name - 1]) === targetName &&
+                normClass_(r2[idCols.cls - 1]) === targetClass) {
+              matchedRow = headerRow + 1 + j;
+              break;
+            }
+          }
+        }
+
+        // Ưu tiên 3: Khớp Tên HS + Mã HS
+        if (matchedRow === -1) {
+          for (var k = 0; k < allRows.length; k++) {
+            var r3 = allRows[k];
+            if (normText_(r3[idCols.name - 1]) === targetName &&
+                normCode_(r3[idCols.stt - 1]) === targetCode) {
+              matchedRow = headerRow + 1 + k;
+              break;
+            }
+          }
+        }
+      }
+
+      var isNewRow = false;
+      if (matchedRow === -1) {
+        matchedRow = Math.max(sheet.getLastRow(), headerRow) + 1;
+        isNewRow = true;
+        sheet.getRange(matchedRow, idCols.stt).setValue(data.studentCode || "");
+        sheet.getRange(matchedRow, idCols.name).setValue(data.fullName || "");
+        sheet.getRange(matchedRow, idCols.cls).setValue(data.className || "");
+      }
+
+      // NHẬN DIỆN / TẠO CỘT TỪ CỘT D (4) TRỞ ĐI
+      var maxHdrCol = Math.max(sheet.getLastColumn(), 10);
+      var hdrValues = sheet.getRange(headerRow, 1, 1, maxHdrCol).getValues()[0];
+      var colMeta = { login: 0, examCode: 0, testType: 0, timeSpent: 0 };
+      var attemptCols = {};
+
+      for (var hc = 3; hc < hdrValues.length; hc++) {
+        var hText = stripAccents_(normText_(hdrValues[hc]));
+        var colNum = hc + 1;
+        if (!hText) continue;
+
+        if (!colMeta.login && hText.indexOf("dang nhap") !== -1) {
+          colMeta.login = colNum;
+        } else if (!colMeta.examCode && hText.indexOf("ma de") !== -1) {
+          colMeta.examCode = colNum;
+        } else if (!colMeta.testType && (hText.indexOf("loai de") !== -1 || hText.indexOf("ten de") !== -1)) {
+          colMeta.testType = colNum;
+        } else if (!colMeta.timeSpent && (hText.indexOf("thoi gian lam") !== -1 || hText.indexOf("thoi luong") !== -1)) {
+          colMeta.timeSpent = colNum;
+        } else {
+          var mAtt = hText.match(/(?:diem\\s*thi\\s*lan|diem\\s*lan|lan\\s*thi|lan)\\s*(\\d+)/);
+          if (mAtt) {
+            attemptCols[parseInt(mAtt[1], 10)] = colNum;
+          } else if (hText.indexOf("lan dau") !== -1) {
+            attemptCols[1] = colNum;
+          }
+        }
+      }
+
+      function allocHeaderCol_(preferredCol, title, bgColor) {
+        var c = preferredCol;
+        while (c <= hdrValues.length && String(hdrValues[c - 1] || "").trim() !== "") {
+          c++;
+        }
+        sheet.getRange(headerRow, c).setValue(title).setFontWeight("bold").setBackground(bgColor);
+        hdrValues[c - 1] = title;
+        return c;
+      }
+
+      if (!colMeta.login) colMeta.login = allocHeaderCol_(4, "Thời gian đăng nhập", "#e0f2fe");
+      if (!colMeta.examCode) colMeta.examCode = allocHeaderCol_(5, "Mã đề thi", "#e0f2fe");
+      if (!colMeta.testType) colMeta.testType = allocHeaderCol_(6, "Loại đề thi", "#e0f2fe");
+      if (!colMeta.timeSpent) colMeta.timeSpent = allocHeaderCol_(7, "Thời gian làm bài", "#e0f2fe");
+
+      // Tìm cột Điểm thi lần 1, lần 2, lần 3... chưa có dữ liệu trên dòng học sinh
+      var attemptIndex = 1;
+      var targetScoreCol = 0;
+      while (true) {
+        var existingCol = attemptCols[attemptIndex];
+        if (!existingCol) {
+          existingCol = allocHeaderCol_(8, "Điểm thi lần " + attemptIndex, "#dcfce7");
+          attemptCols[attemptIndex] = existingCol;
+        }
+        var existingScoreVal = sheet.getRange(matchedRow, existingCol).getValue();
+        if (existingScoreVal === "" || existingScoreVal === null || existingScoreVal === undefined) {
+          targetScoreCol = existingCol;
+          break;
+        }
+        attemptIndex++;
+      }
+
+      var attemptTitle = String(sheet.getRange(headerRow, targetScoreCol).getValue() || ("Điểm thi lần " + attemptIndex)).trim();
+
+      // Cột Thời gian đăng nhập
+      var loginCell = sheet.getRange(matchedRow, colMeta.login);
+      var newLoginTime = data.loginTime || data.finishTime || new Date().toLocaleString("vi-VN");
+      var existingLogin = String(loginCell.getValue() || "").trim();
+      if (!existingLogin) {
+        loginCell.setValue(newLoginTime);
+      } else if (existingLogin.indexOf(newLoginTime) === -1) {
+        loginCell.setValue(existingLogin + "\\n" + newLoginTime);
+      }
+
+      // Cột Mã đề thi
+      var codeCell = sheet.getRange(matchedRow, colMeta.examCode);
+      var newExamCode = data.examCode || "";
+      var existingCode = String(codeCell.getValue() || "").trim();
+      if (!existingCode) {
+        codeCell.setValue(attemptIndex > 1 ? ("L" + attemptIndex + ": " + newExamCode) : newExamCode);
+      } else if (newExamCode && existingCode.indexOf(newExamCode) === -1) {
+        codeCell.setValue(existingCode + " | L" + attemptIndex + ": " + newExamCode);
+      }
+
+      // Cột Loại đề thi
+      var typeCell = sheet.getRange(matchedRow, colMeta.testType);
+      var newTestType = data.testName || "";
+      var existingType = String(typeCell.getValue() || "").trim();
+      if (!existingType) {
+        typeCell.setValue(newTestType);
+      } else if (newTestType && existingType.indexOf(newTestType) === -1) {
+        typeCell.setValue(existingType + " | " + newTestType);
+      }
+
+      // Cột Thời gian làm bài
+      var timeCell = sheet.getRange(matchedRow, colMeta.timeSpent);
+      var newTimeSpent = data.timeSpentFormatted || "";
+      var existingTimeSpent = String(timeCell.getValue() || "").trim();
+      if (!existingTimeSpent) {
+        timeCell.setValue(newTimeSpent);
+      } else if (newTimeSpent) {
+        timeCell.setValue(existingTimeSpent + " | L" + attemptIndex + ": " + newTimeSpent);
+      }
+
+      // Cột Điểm thi lần N
+      var scoreCell = sheet.getRange(matchedRow, targetScoreCol);
+      scoreCell.setValue(data.score !== undefined ? data.score : 0);
+
+      // Ghi chú chi tiết kèm theo khi rê chuột vào ô điểm
+      var correctSummary = (data.correctCount !== undefined && data.totalQuestions)
+        ? (data.correctCount + "/" + data.totalQuestions + " câu")
+        : "";
+      var noteLines = [
+        attemptTitle + ": " + (data.score !== undefined ? data.score : 0) + " điểm" + (correctSummary ? " (" + correctSummary + ")" : ""),
+        "Mã đề: " + newExamCode + " | Loại đề: " + newTestType,
+        "Thời gian làm: " + newTimeSpent + " | Vi phạm: " + (data.violationsCount || 0) + " lần",
+        "Nhận biết: " + (data.correctNhanBiet || 0) + " | Thông hiểu: " + (data.correctThongHieu || 0) + " | Vận dụng: " + (data.correctVanDung || 0),
+        "Nộp lúc: " + (data.finishTime || "") + " | " + (data.statusText || "")
+      ];
+      scoreCell.setNote(noteLines.join("\\n"));
+
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "success",
+        action: "SUBMISSION",
+        sheetName: sheet.getName(),
+        matchedRow: matchedRow,
+        updatedExistingRow: !isNewRow,
+        attemptIndex: attemptIndex,
+        attemptColTitle: attemptTitle,
+        scoreColLetter: colToLetter_(targetScoreCol)
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Hành động không xác định" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}`;
+
+    if (btnOpenGv && gvPortalModal) {
+      btnOpenGv.onclick = () => {
+        gvPortalModal.classList.remove('hidden');
+        if (!isGvAuthenticated) {
+          gvAuthBox.classList.remove('hidden');
+          gvPanelContent.classList.add('hidden');
+          if (gvLoginErr) gvLoginErr.textContent = '';
+          if (gvUserInp) gvUserInp.value = '';
+          if (gvPassInp) gvPassInp.value = '';
+          setTimeout(() => gvUserInp?.focus(), 150);
+        } else {
+          gvAuthBox.classList.add('hidden');
+          gvPanelContent.classList.remove('hidden');
+          initGvPanel();
+        }
+      };
+    }
+
+    if (btnCloseGv && gvPortalModal) {
+      btnCloseGv.onclick = () => gvPortalModal.classList.add('hidden');
+    }
+
+    function doGvLogin() {
+      const u = gvUserInp ? gvUserInp.value.trim() : '';
+      const p = gvPassInp ? gvPassInp.value.trim() : '';
+
+      if (u === 'MaiHang' && p === '123456hang') {
+        isGvAuthenticated = true;
+        gvAuthBox.classList.add('hidden');
+        gvPanelContent.classList.remove('hidden');
+        if (gvLoginErr) gvLoginErr.textContent = '';
+        initGvPanel();
+      } else {
+        if (gvLoginErr) gvLoginErr.textContent = 'Tên đăng nhập hoặc mật khẩu không chính xác!';
+        gvPassInp?.focus();
+        gvPassInp?.select();
+      }
+    }
+
+    if (btnGvLogin) btnGvLogin.onclick = doGvLogin;
+    if (gvUserInp) {
+      gvUserInp.onkeydown = (e) => {
+        if (e.key === 'Enter') gvPassInp ? gvPassInp.focus() : doGvLogin();
+      };
+    }
+    if (gvPassInp) {
+      gvPassInp.onkeydown = (e) => {
+        if (e.key === 'Enter') doGvLogin();
+      };
+    }
+
+    if (btnGvLogout) {
+      btnGvLogout.onclick = () => {
+        isGvAuthenticated = false;
+        gvPanelContent.classList.add('hidden');
+        gvAuthBox.classList.remove('hidden');
+        if (gvUserInp) gvUserInp.value = '';
+        if (gvPassInp) gvPassInp.value = '';
+        if (gvLoginErr) gvLoginErr.textContent = '';
+      };
+    }
+
+    // Tabs switching
+    function initGvPanel() {
+      switchGvTab('apps');
+      const appsCodeEl = document.getElementById('gv-apps-script-code');
+      if (appsCodeEl) appsCodeEl.textContent = APPS_SCRIPT_SOURCE;
+      const webhookInp = document.getElementById('gv-webhook-url-input');
+      const webhookStatus = document.getElementById('gv-webhook-status');
+      if (webhookInp) webhookInp.value = getAppsScriptWebhookUrl();
+      if (webhookStatus) webhookStatus.textContent = '';
+    }
+
+    const btnSaveWebhook = document.getElementById('btn-save-webhook-url');
+    if (btnSaveWebhook) {
+      btnSaveWebhook.onclick = () => {
+        const webhookInp = document.getElementById('gv-webhook-url-input');
+        const webhookStatus = document.getElementById('gv-webhook-status');
+        const val = webhookInp ? webhookInp.value.trim() : '';
+        if (!val || !val.startsWith('https://script.google.com/')) {
+          if (webhookStatus) {
+            webhookStatus.style.color = '#dc2626';
+            webhookStatus.textContent = 'URL không hợp lệ. Vui lòng nhập đường dẫn bắt đầu bằng https://script.google.com/...';
+          }
+          return;
+        }
+        try {
+          localStorage.setItem(WEBHOOK_STORAGE_KEY, val);
+          if (webhookStatus) {
+            webhookStatus.style.color = '#047857';
+            webhookStatus.textContent = '✓ Đã lưu URL Web App Apps Script mới!';
+          }
+        } catch (e) {}
+      };
+    }
+
+    const btnTestWebhook = document.getElementById('btn-test-webhook-url');
+    if (btnTestWebhook) {
+      btnTestWebhook.onclick = async () => {
+        const webhookInp = document.getElementById('gv-webhook-url-input');
+        const webhookStatus = document.getElementById('gv-webhook-status');
+        const url = (webhookInp ? webhookInp.value.trim() : '') || getAppsScriptWebhookUrl();
+        if (webhookStatus) {
+          webhookStatus.style.color = '#0369a1';
+          webhookStatus.textContent = '⏳ Đang kiểm tra kết nối tới Apps Script...';
+        }
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'PING' })
+          });
+          const text = await res.text();
+          if (res.ok && text.trim().startsWith('{')) {
+            if (webhookStatus) {
+              webhookStatus.style.color = '#047857';
+              webhookStatus.textContent = '✓ Kết nối thành công! Web App đã mở quyền truy cập công khai và sẵn sàng nhận điểm.';
+            }
+          } else {
+            throw new Error('HTTP ' + res.status);
+          }
+        } catch (err) {
+          if (webhookStatus) {
+            webhookStatus.style.color = '#dc2626';
+            webhookStatus.textContent = '❌ Không kết nối được (lỗi quyền truy cập 403 hoặc URL chưa đúng). Trong Apps Script hãy chọn Triển khai > Quản lý các bản triển khai > Người có quyền truy cập: "Bất kỳ ai" (Anyone).';
+          }
+        }
+      };
+    }
+
+    function switchGvTab(tabName) {
+      const tabs = ['apps', 'html'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const pane = document.getElementById(`tab-pane-${t}`);
+        if (t === tabName) {
+          if (btn) btn.className = 'btn btn-primary';
+          if (pane) pane.classList.remove('hidden');
+        } else {
+          if (btn) btn.className = 'btn btn-secondary';
+          if (pane) pane.classList.add('hidden');
+        }
+      });
+    }
+
+    const tabBtnApps = document.getElementById('tab-btn-apps');
+    if (tabBtnApps) tabBtnApps.onclick = () => switchGvTab('apps');
+    const tabBtnHtml = document.getElementById('tab-btn-html');
+    if (tabBtnHtml) tabBtnHtml.onclick = () => switchGvTab('html');
+
+    // Copy Apps Script
+    const btnCopyApps = document.getElementById('btn-copy-apps-script');
+    if (btnCopyApps) {
+      btnCopyApps.onclick = () => {
+        navigator.clipboard.writeText(APPS_SCRIPT_SOURCE).then(() => {
+          alert('Đã sao chép toàn bộ mã Google Apps Script vào bộ nhớ tạm (Clipboard)!');
+        }).catch(() => {
+          prompt('Nhấn Ctrl+C để sao chép mã Apps Script:', APPS_SCRIPT_SOURCE);
+        });
+      };
+    }
+
+    // Tab 4: Download HTML File
+    const btnDownloadHtml = document.getElementById('btn-download-html');
+    if (btnDownloadHtml) {
+      btnDownloadHtml.onclick = async () => {
+        try {
+          const res = await fetch('/public/EduSecure_Offline_MaiHang.html');
+          if (res.ok) {
+            const htmlText = await res.text();
+            const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'EduSecure_Offline_MaiHang.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            return;
+          }
+        } catch (e) {}
+
+        const clone = document.documentElement.cloneNode(true);
+        const cloneLogin = clone.querySelector('#view-login');
+        const cloneLobby = clone.querySelector('#view-lobby');
+        const cloneExam = clone.querySelector('#view-exam');
+        const cloneResult = clone.querySelector('#view-result');
+        const cloneModal = clone.querySelector('#gv-portal-modal');
+        if (cloneLogin) cloneLogin.classList.remove('hidden');
+        if (cloneLobby) cloneLobby.classList.add('hidden');
+        if (cloneExam) cloneExam.classList.add('hidden');
+        if (cloneResult) cloneResult.classList.add('hidden');
+        if (cloneModal) cloneModal.classList.add('hidden');
+
+        const fullHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'EduSecure_Offline_MaiHang.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+    }
+
+    // Tab 4: Copy HTML code
+    const btnCopyHtml = document.getElementById('btn-copy-html-code');
+    if (btnCopyHtml) {
+      btnCopyHtml.onclick = async () => {
+        try {
+          const res = await fetch('/public/EduSecure_Offline_MaiHang.html');
+          if (res.ok) {
+            const htmlText = await res.text();
+            await navigator.clipboard.writeText(htmlText);
+            alert('Đã sao chép toàn bộ mã nguồn HTML chuẩn vào bộ nhớ tạm (Clipboard)!');
+            return;
+          }
+        } catch (e) {}
+
+        const clone = document.documentElement.cloneNode(true);
+        const cloneLogin = clone.querySelector('#view-login');
+        const cloneLobby = clone.querySelector('#view-lobby');
+        const cloneExam = clone.querySelector('#view-exam');
+        const cloneResult = clone.querySelector('#view-result');
+        const cloneModal = clone.querySelector('#gv-portal-modal');
+        if (cloneLogin) cloneLogin.classList.remove('hidden');
+        if (cloneLobby) cloneLobby.classList.add('hidden');
+        if (cloneExam) cloneExam.classList.add('hidden');
+        if (cloneResult) cloneResult.classList.add('hidden');
+        if (cloneModal) cloneModal.classList.add('hidden');
+
+        const fullHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+        navigator.clipboard.writeText(fullHtml).then(() => {
+          alert('Đã sao chép toàn bộ mã nguồn HTML vào bộ nhớ tạm (Clipboard)!');
+        }).catch(() => {
+          alert('Không thể tự động sao chép. Vui lòng bấm Tải Tệp HTML Về Máy!');
+        });
+      };
+    }
+
+    // Initial Load
+    loadRoomStatus();
+    initStudentSession();
+  </script>
+</body>
+</html>
